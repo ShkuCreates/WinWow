@@ -3,7 +3,15 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Star, ShoppingCart, Check, Calendar, MapPin, CreditCard, User, Mail } from 'lucide-react';
+import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+
+// Seller crypto configuration - UPDATE THESE WITH YOUR REAL ADDRESSES!
+const SELLER_ADDRESSES = {
+  USDT: '0xYourEVMAddressHere', // USDT on Ethereum/Polygon/etc.
+  BTC: 'bc1qYourBitcoinAddressHere', // Bitcoin
+  ETH: '0xYourEthereumAddressHere', // Ethereum
+};
 
 // Mock product data
 const productDetails: Record<string, any> = {
@@ -271,7 +279,7 @@ export default function ProductClient() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl mx-auto glass rounded-2xl p-8"
+          className="max-w-3xl mx-auto glass rounded-2xl p-8"
         >
           <button
             onClick={() => setStep('form')}
@@ -279,9 +287,10 @@ export default function ProductClient() {
           >
             ← Back to Form
           </button>
-          <h2 className="text-3xl font-bold text-[#f5f3ee] mb-6">Pay with Crypto</h2>
+          <h2 className="text-3xl font-bold text-[#f5f3ee] mb-6 text-center">Pay with Crypto</h2>
 
-          <div className="glass rounded-xl p-6 mb-6">
+          {/* Order Summary */}
+          <div className="glass rounded-xl p-6 mb-8">
             <div className="flex items-center gap-4 mb-4">
               <img
                 src={product.thumbnail}
@@ -293,40 +302,101 @@ export default function ProductClient() {
                 <div className="text-[#9a958c]">{product.brand}</div>
               </div>
             </div>
-            <div className="space-y-2 pt-4 border-t border-white/10">
-              <div className="flex justify-between text-[#9a958c]">
-                <span>Deposit Amount</span>
-                <span>${depositAmount.toLocaleString()}</span>
-              </div>
+            <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <span className="text-[#9a958c]">Deposit Amount</span>
+              <span className="text-2xl font-bold text-[#f5f3ee]">${depositAmount.toLocaleString()}</span>
             </div>
           </div>
 
-          <div className="mb-6">
+          {/* Crypto Selector */}
+          <div className="mb-8">
             <p className="text-sm text-[#9a958c] mb-3">Select Cryptocurrency</p>
             <div className="grid grid-cols-3 gap-3">
-              {['USDT', 'BTC', 'ETH'].map((crypto) => (
+              {(['USDT', 'BTC', 'ETH'] as const).map((crypto) => (
                 <button
                   key={crypto}
                   onClick={() => setSelectedCrypto(crypto)}
-                  className={`glass py-3 px-4 rounded-lg text-center font-medium transition-all ${
+                  className={`glass py-4 px-4 rounded-lg text-center font-medium transition-all ${
                     selectedCrypto === crypto
-                      ? 'text-[#c9a24b] ring-2 ring-[#c9a24b]'
+                      ? 'text-[#c9a24b] ring-2 ring-[#c9a24b] bg-yellow-500/10'
                       : 'text-[#f5f3ee] hover:bg-white/10'
                   }`}
                 >
-                  {crypto}
+                  <div className="text-lg font-bold">{crypto}</div>
                 </button>
               ))}
             </div>
           </div>
 
-          <button
-            onClick={handlePayment}
-            className="w-full premium-button flex items-center justify-center gap-2 py-4 text-lg"
-          >
-            <CreditCard size={20} />
-            Pay Now with {selectedCrypto}
-          </button>
+          {/* Payment Details */}
+          <div className="glass rounded-xl p-8 text-center">
+            <h3 className="text-xl font-semibold text-[#f5f3ee] mb-6">Send {selectedCrypto} to Address</h3>
+            
+            {/* QR Code */}
+            <div className="flex justify-center mb-6">
+              <div className="bg-white p-4 rounded-xl">
+                <QRCodeSVG
+                  value={SELLER_ADDRESSES[selectedCrypto]}
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                />
+              </div>
+            </div>
+
+            {/* Address Display */}
+            <div className="mb-6">
+              <div className="flex items-center justify-center gap-2 bg-[rgba(255,255,255,0.05)] p-4 rounded-xl border border-white/10">
+                <span className="text-[#f5f3ee] text-sm font-mono break-all max-w-md">
+                  {SELLER_ADDRESSES[selectedCrypto]}
+                </span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(SELLER_ADDRESSES[selectedCrypto])}
+                  className="text-[#c9a24b] hover:text-yellow-300 transition-colors flex-shrink-0"
+                  title="Copy Address"
+                >
+                  <Copy size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* Payment Instructions */}
+            <div className="text-left mb-8 space-y-3 text-[#9a958c]">
+              <p className="font-semibold text-[#f5f3ee]">Important Instructions:</p>
+              <ol className="list-decimal list-inside space-y-2">
+                <li>Copy the address or scan the QR code above</li>
+                <li>Send exactly <span className="text-[#c9a24b] font-semibold">${depositAmount.toLocaleString()}</span> worth of {selectedCrypto}</li>
+                <li>Wait for 1-6 block confirmations (usually 5-30 minutes)</li>
+                <li>Click "Check Payment" to verify your payment</li>
+              </ol>
+            </div>
+
+            {/* Check Payment Button */}
+            <button
+              onClick={handlePayment}
+              className="w-full premium-button flex items-center justify-center gap-2 py-4 text-lg"
+            >
+              <Check size={20} />
+              I've Sent Payment - Check Confirmation
+            </button>
+
+            {/* Block Explorer Link */}
+            <div className="mt-4 text-sm text-[#9a958c]">
+              <a
+                href={
+                  selectedCrypto === 'BTC'
+                    ? `https://mempool.space/address/${SELLER_ADDRESSES[selectedCrypto]}`
+                    : `https://etherscan.io/address/${SELLER_ADDRESSES[selectedCrypto]}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#c9a24b] hover:text-yellow-300 flex items-center justify-center gap-1"
+              >
+                <ExternalLink size={14} />
+                View on Block Explorer
+              </a>
+            </div>
+          </div>
         </motion.div>
       )}
 
