@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ShoppingCart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -18,40 +17,41 @@ export default function ProductCard({ product }: { product: Product }) {
   const discountedPrice = product.price * (1 - product.discountPercentage / 100);
 
   return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      className="glass rounded-2xl overflow-hidden transition-all duration-300"
-    >
+    <div className="product-card glass rounded-2xl overflow-hidden">
       <div className="relative aspect-square overflow-hidden">
         <Image
           src={product.thumbnail}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 hover:scale-110"
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
+        <button className="wishlist-btn absolute top-4 right-4 p-2 glass-panel rounded-full">
+          <Heart size={20} className="text-[#f5f3ee]" strokeWidth={1.5} />
+        </button>
         {product.discountPercentage > 0 && (
-          <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="discount-shimmer absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-semibold">
             {product.discountPercentage}% OFF
           </div>
         )}
       </div>
       
       <div className="p-6">
-        <div className="text-sm text-gray-400 mb-1">{product.brand}</div>
-        <h3 className="text-xl font-semibold text-white mb-2">{product.name}</h3>
+        <div className="text-sm text-[#9a958c] mb-1">{product.brand}</div>
+        <h3 className="text-xl font-medium text-[#f5f3ee] mb-2">{product.name}</h3>
         
         <div className="flex items-center gap-3 mb-4">
           {product.discountPercentage > 0 ? (
             <>
-              <span className="text-2xl font-bold text-white">
+              <span className="text-2xl font-bold text-[#f5f3ee]">
                 ${discountedPrice.toLocaleString()}
               </span>
-              <span className="text-lg text-gray-500 line-through">
+              <span className="text-lg text-[#9a958c] line-through">
                 ${product.price.toLocaleString()}
               </span>
             </>
           ) : (
-            <span className="text-2xl font-bold text-white">
+            <span className="text-2xl font-bold text-[#f5f3ee]">
               ${product.price.toLocaleString()}
             </span>
           )}
@@ -60,7 +60,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="flex gap-3">
           <Link 
             href={`/products/${product.id}`} 
-            className="flex-1 premium-button text-center text-sm"
+            className="flex-1 premium-button text-center text-sm py-3"
           >
             View Details
           </Link>
@@ -69,6 +69,6 @@ export default function ProductCard({ product }: { product: Product }) {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
