@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink } from 'lucide-react';
+import { Star, ShoppingCart, Check, Calendar, MapPin, CreditCard, User, Mail, Copy, ExternalLink } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
-// Seller crypto configuration
+// Seller crypto configuration - UPDATE THESE WITH YOUR REAL ADDRESSES!
 const SELLER_ADDRESSES = {
   USDT: '0xF082C66009e8467C99d9ef03183820ad244F129B', // USDT (EVM)
   BTC: 'bc1qry6ltzu4hk2euunmm4uq6n89f34sz9j3k283hz', // Bitcoin
@@ -14,7 +14,7 @@ const SELLER_ADDRESSES = {
   LTC: 'LZswPU7o7Spwih9P7mb99iD6v9aL1Zc1aD', // Litecoin
 };
 
-// Mock product data
+// Mock product data - ALL PRODUCTS HAVE ALL PROPERTIES
 const productDetails: Record<string, any> = {
   '1': {
     id: '1',
@@ -84,12 +84,88 @@ const productDetails: Record<string, any> = {
       'Glass': 'Sapphire Crystal',
       'Strap': 'Oyster Bracelet',
     },
-    thumbnail: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=1200&q=80',
-    images: [
-      'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=1200&q=80',
-      'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=1200&q=80',
-    ],
+    thumbnail: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=600&q=80',
+    images: ['https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=600&q=80'],
     stock: 3,
+    reviews: [
+      {
+        id: 'r1',
+        user: 'Alex M.',
+        rating: 5,
+        comment: 'Iconic watch, looks even better in person!',
+        date: '2026-04-18',
+      },
+      {
+        id: 'r2',
+        user: 'Jessica W.',
+        rating: 5,
+        comment: 'Bought this for my boyfriend, he wears it every day.',
+        date: '2026-05-05',
+      },
+    ],
+  },
+  '3': {
+    id: '3',
+    name: 'Nautilus Blue',
+    brand: 'Patek Philippe',
+    price: 85000,
+    discountPercentage: 5,
+    description: 'The Patek Philippe Nautilus is a timeless classic with its distinctive porthole design and elegant blue dial.',
+    specifications: {
+      'Case Material': 'Stainless Steel',
+      'Case Diameter': '40mm',
+      'Movement': 'Automatic',
+      'Water Resistance': '120m',
+      'Glass': 'Sapphire Crystal',
+      'Strap': 'Integrated Bracelet',
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80',
+    images: ['https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80'],
+    stock: 2,
+    reviews: [
+      {
+        id: 'r1',
+        user: 'Robert T.',
+        rating: 5,
+        comment: 'Absolutely stunning watch, worth every penny.',
+        date: '2026-03-25',
+      },
+    ],
+  },
+  '4': {
+    id: '4',
+    name: 'Speedmaster Professional',
+    brand: 'Omega',
+    price: 6500,
+    discountPercentage: 15,
+    description: 'The Omega Speedmaster Professional, also known as the "Moonwatch", has a rich history in space exploration.',
+    specifications: {
+      'Case Material': 'Stainless Steel',
+      'Case Diameter': '42mm',
+      'Movement': 'Manual Wind',
+      'Water Resistance': '50m',
+      'Glass': 'Hesalite Crystal',
+      'Strap': 'Leather',
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&q=80',
+    images: ['https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&q=80'],
+    stock: 8,
+    reviews: [
+      {
+        id: 'r1',
+        user: 'Chris P.',
+        rating: 5,
+        comment: 'A true classic, love the manual wind movement!',
+        date: '2026-02-10',
+      },
+      {
+        id: 'r2',
+        user: 'Amanda S.',
+        rating: 4,
+        comment: 'Beautiful watch, very comfortable on the wrist.',
+        date: '2026-04-22',
+      },
+    ],
   },
 };
 
@@ -148,7 +224,7 @@ export default function ProductClient() {
                   key={index}
                   onClick={() => setSelectedImage(index)}
                   className={`glass rounded-xl overflow-hidden w-20 h-20 ${
-                    selectedImage === index ? 'ring-2 ring-yellow-400' : ''
+                    selectedImage === index ? 'ring-2 ring-[#c9a24b]' : ''
                   }`}
                 >
                   <img
@@ -173,29 +249,21 @@ export default function ProductClient() {
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={20} fill="currentColor" className="text-yellow-400" />
+                  <Star key={i} size={20} fill={i < Math.floor(4.7) ? "#c9a24b" : "transparent"} className={i < Math.floor(4.7) ? "text-[#c9a24b]" : "text-[#9a958c]"} />
                 ))}
               </div>
-              <span className="text-[#9a958c]">(4.9 · 247 reviews)</span>
+              <span className="text-[#9a958c]">(4.7 · {product.reviews.length} reviews)</span>
             </div>
 
             <div className="flex items-center gap-3 mb-6">
               {product.discountPercentage > 0 ? (
                 <>
-                  <span className="text-4xl font-bold text-[#f5f3ee]">
-                    ${discountedPrice.toLocaleString()}
-                  </span>
-                  <span className="text-2xl text-[#9a958c] line-through">
-                    ${product.price.toLocaleString()}
-                  </span>
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {product.discountPercentage}% OFF
-                  </span>
+                  <span className="text-4xl font-bold text-[#f5f3ee]">${discountedPrice.toLocaleString()}</span>
+                  <span className="text-2xl text-[#9a958c] line-through">${product.price.toLocaleString()}</span>
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">{product.discountPercentage}% OFF</span>
                 </>
               ) : (
-                <span className="text-4xl font-bold text-[#f5f3ee]">
-                  ${product.price.toLocaleString()}
-                </span>
+                <span className="text-4xl font-bold text-[#f5f3ee]">${product.price.toLocaleString()}</span>
               )}
             </div>
 
@@ -204,7 +272,7 @@ export default function ProductClient() {
             {/* Pre-book CTA */}
             <div className="glass rounded-2xl p-6 mb-8">
               <h3 className="text-xl font-semibold text-[#f5f3ee] mb-4 flex items-center gap-2">
-                <Calendar size={24} className="text-yellow-400" />
+                <Calendar size={24} className="text-[#c9a24b]" />
                 Pre-book Now
               </h3>
               <p className="text-[#9a958c] mb-4">
@@ -212,7 +280,7 @@ export default function ProductClient() {
               </p>
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
                 <span className="text-[#9a958c]">Deposit Amount</span>
-                <span className="text-2xl font-bold text-yellow-400">
+                <span className="text-2xl font-bold text-[#c9a24b]">
                   ${depositAmount.toLocaleString()}
                 </span>
               </div>
@@ -245,12 +313,7 @@ export default function ProductClient() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={18}
-                        fill={i < Math.floor(4.7) ? "#c9a24b" : "transparent"}
-                        className={i < Math.floor(4.7) ? "text-[#c9a24b]" : "text-[#9a958c]"}
-                      />
+                      <Star key={i} size={18} fill={i < Math.floor(4.7) ? "#c9a24b" : "transparent"} className={i < Math.floor(4.7) ? "text-[#c9a24b]" : "text-[#9a958c]"} />
                     ))}
                   </div>
                   <span className="text-[#f5f3ee] font-medium">4.7</span>
@@ -275,12 +338,7 @@ export default function ProductClient() {
                       </div>
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            size={14}
-                            fill={i < review.rating ? "#c9a24b" : "transparent"}
-                            className={i < review.rating ? "text-[#c9a24b]" : "text-[#9a958c]"}
-                          />
+                          <Star key={i} size={14} fill={i < review.rating ? "#c9a24b" : "transparent"} className={i < review.rating ? "text-[#c9a24b]" : "text-[#9a958c]"} />
                         ))}
                       </div>
                     </div>
@@ -318,7 +376,7 @@ export default function ProductClient() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-[rgba(255,255,255,0.3)]"
+                  className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
                 />
               </div>
             </div>
@@ -332,7 +390,7 @@ export default function ProductClient() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="john@example.com"
-                  className="w-full pl-12 pr-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-[rgba(255,255,255,0.3)]"
+                  className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
                 />
               </div>
             </div>
@@ -346,7 +404,7 @@ export default function ProductClient() {
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   placeholder="123 Luxury St, Beverly Hills, CA 90210"
                   rows={3}
-                  className="w-full pl-12 pr-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-[rgba(255,255,255,0.3)]"
+                  className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
                 />
               </div>
             </div>
@@ -362,7 +420,7 @@ export default function ProductClient() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-3xl mx-auto glass rounded-2xl p-8"
+          className="max-w-2xl mx-auto glass rounded-2xl p-8"
         >
           <button
             onClick={() => setStep('form')}
@@ -429,7 +487,7 @@ export default function ProductClient() {
 
             {/* Address Display */}
             <div className="mb-6">
-              <div className="flex items-center justify-center gap-2 bg-[rgba(255,255,255,0.05)] p-4 rounded-xl border border-white/10">
+              <div className="flex items-center justify-center gap-2 bg-white/5 p-4 rounded-xl border border-white/10">
                 <span className="text-[#f5f3ee] text-sm font-mono break-all max-w-md">
                   {SELLER_ADDRESSES[selectedCrypto]}
                 </span>
@@ -468,14 +526,11 @@ export default function ProductClient() {
               <a
                 href={(() => {
                   switch (selectedCrypto) {
-                    case 'BTC':
-                      return `https://mempool.space/address/${SELLER_ADDRESSES[selectedCrypto]}`;
-                    case 'LTC':
-                      return `https://blockchair.com/litecoin/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                    case 'BTC': return `https://mempool.space/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                    case 'LTC': return `https://blockchair.com/litecoin/address/${SELLER_ADDRESSES[selectedCrypto]}`;
                     case 'USDT':
                     case 'ETH':
-                    default:
-                      return `https://etherscan.io/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                    default: return `https://etherscan.io/address/${SELLER_ADDRESSES[selectedCrypto]}`;
                   }
                 })()}
                 target="_blank"
@@ -498,7 +553,7 @@ export default function ProductClient() {
           className="max-w-2xl mx-auto glass rounded-2xl p-12 text-center"
         >
           <div className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Check size={48} className="text-yellow-400" />
+            <Check size={48} className="text-[#c9a24b]" />
           </div>
           <h2 className="text-4xl font-bold text-[#f5f3ee] mb-4">Order Confirmed!</h2>
           <p className="text-[#9a958c] mb-8 text-lg">
