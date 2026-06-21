@@ -51,6 +51,46 @@ const productDetails: Record<string, any> = {
       { id: 'r15', user: 'Nathan J.', rating: 5, comment: 'Exactly what I wanted — masculine, refined, and reliable. Best pre-book purchase I\'ve made. 10/10.', date: '2026-06-19' },
     ],
   },
+  '2': {
+    id: '2',
+    name: 'WinWow 114A Premium - Men',
+    brand: 'WinWow',
+    price: 59,
+    preBookDepositPercentage: 24,
+    description: 'The WinWow 114A Premium is a bold men\'s statement piece engineered for those who demand presence and precision. A striking dial, robust case, and premium finish elevate every outfit — secure yours today with a 24% pre-book deposit.',
+    specifications: {
+      'Movement': 'Japanese Quartz',
+      'Case Material': 'Alloy Steel',
+      'Case Diameter': '44mm',
+      'Water Resistance': '3 ATM',
+      'Strap': 'Silicone Sport Band',
+    },
+    thumbnail: 'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
+    images: [
+      'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
+      'https://i.ibb.co/hx3GssYD/Chat-GPT-Image-Jun-22-2026-03-25-31-AM.png',
+      'https://i.ibb.co/fzNKpCty/Chat-GPT-Image-Jun-22-2026-03-25-28-AM.png',
+      'https://i.ibb.co/wZF0ZtGW/Chat-GPT-Image-Jun-22-2026-03-26-23-AM.png',
+    ],
+    stock: 0,
+    reviews: [
+      { id: 'r1', user: 'Arjun S.', rating: 5, comment: 'Bhai, kya watch hai! The 114A looks absolutely premium on wrist. Pre-booked instantly — worth every rupee of the deposit.', date: '2026-05-18' },
+      { id: 'r2', user: 'Priya M.', rating: 5, comment: 'Ordered for my husband\'s birthday. He was thrilled — the dial is stunning and build quality exceeds the price.', date: '2026-05-25' },
+      { id: 'r3', user: 'Rohit K.', rating: 5, comment: 'Solid watch yaar. Wearing it daily to office and getting compliments every single day. WinWow nailed it with this one.', date: '2026-06-01' },
+      { id: 'r4', user: 'Ananya R.', rating: 4, comment: 'Beautiful design and great finish. Strap took two days to feel comfortable but now it\'s perfect. Very happy overall.', date: '2026-06-08' },
+      { id: 'r5', user: 'Vikram P.', rating: 5, comment: 'Premium feel at an affordable price. The 24% deposit pre-book was easy and delivery was smooth. Highly recommend!', date: '2026-06-12' },
+      { id: 'r6', user: 'Kavya N.', rating: 5, comment: 'Gifted to my brother — he couldn\'t stop showing it off. Looks far more expensive than $59. Shukriya WinWow!', date: '2026-06-15' },
+      { id: 'r7', user: 'Rahul D.', rating: 5, comment: 'Masst watch hai! Bold dial, perfect weight, and keeps time accurately. My third WinWow and best one yet.', date: '2026-05-28' },
+      { id: 'r8', user: 'Shruti G.', rating: 4, comment: 'Lovely watch with a sporty elegant look. Wish the clasp was slightly easier to adjust, but quality is top-notch.', date: '2026-06-03' },
+      { id: 'r9', user: 'Aditya V.', rating: 5, comment: 'Pre-booked without thinking twice. Exactly as shown in photos — premium packaging and flawless timepiece.', date: '2026-06-10' },
+      { id: 'r10', user: 'Meera J.', rating: 5, comment: 'Perfect for formal and casual wear. The 114A Premium has that luxury look my husband always wanted. Bahut accha!', date: '2026-06-17' },
+      { id: 'r11', user: 'Karan B.', rating: 4, comment: 'Great value watch. Deposit process was simple and payment verification worked smoothly. Would buy again.', date: '2026-06-05' },
+      { id: 'r12', user: 'Divya T.', rating: 5, comment: 'Stunning timepiece! The gold and black combination is chef\'s kiss. Gets noticed at every party.', date: '2026-06-20' },
+      { id: 'r13', user: 'Aman H.', rating: 5, comment: 'Ek number watch! Comfortable all day, waterproof enough for daily use, and looks like a ₹50,000 watch.', date: '2026-06-14' },
+      { id: 'r14', user: 'Neha C.', rating: 4, comment: 'Very satisfied with the pre-book experience. Watch is gorgeous — minor delay in shipping but product is flawless.', date: '2026-06-22' },
+      { id: 'r15', user: 'Rajesh L.', rating: 5, comment: 'Best pre-book decision I\'ve made. The 114A Premium is bold, reliable, and turns heads everywhere. 10/10.', date: '2026-06-19' },
+    ],
+  },
 };
 
 export default function ProductClient() {
@@ -74,6 +114,10 @@ export default function ProductClient() {
 
   const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
   const visibleReviews = showAllReviews ? product.reviews : product.reviews.slice(0, 5);
+  const averageRating =
+    product.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) /
+    product.reviews.length;
+  const ratingDisplay = averageRating.toFixed(1);
 
   const createOrderForPayment = useCallback(
     async (crypto: CryptoCurrency, customer = formData) => {
@@ -190,10 +234,10 @@ export default function ProductClient() {
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={20} fill={i < Math.floor(4.7) ? '#c9a24b' : 'transparent'} className={i < Math.floor(4.7) ? 'text-[#c9a24b]' : 'text-[#9a958c]'} />
+                  <Star key={i} size={20} fill={i < Math.floor(averageRating) ? '#c9a24b' : 'transparent'} className={i < Math.floor(averageRating) ? 'text-[#c9a24b]' : 'text-[#9a958c]'} />
                 ))}
               </div>
-              <span className="text-[#9a958c]">(4.7 · {product.reviews.length} reviews)</span>
+              <span className="text-[#9a958c]">({ratingDisplay} · {product.reviews.length} reviews)</span>
             </div>
 
             <div className="flex items-center gap-3 mb-2">
@@ -252,10 +296,10 @@ export default function ProductClient() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill={i < Math.floor(4.7) ? '#c9a24b' : 'transparent'} className={i < Math.floor(4.7) ? 'text-[#c9a24b]' : 'text-[#9a958c]'} />
+                      <Star key={i} size={18} fill={i < Math.floor(averageRating) ? '#c9a24b' : 'transparent'} className={i < Math.floor(averageRating) ? 'text-[#c9a24b]' : 'text-[#9a958c]'} />
                     ))}
                   </div>
-                  <span className="text-[#f5f3ee] font-medium">4.7</span>
+                  <span className="text-[#f5f3ee] font-medium">{ratingDisplay}</span>
                   <span className="text-[#9a958c]">({product.reviews.length} reviews)</span>
                 </div>
               </div>

@@ -22,6 +22,21 @@ const allProducts = [
     ],
     stock: 0,
   },
+  {
+    id: '2',
+    name: 'WinWow 114A Premium - Men',
+    brand: 'WinWow',
+    price: 59,
+    preBookDepositPercentage: 24,
+    thumbnail: 'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
+    images: [
+      'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
+      'https://i.ibb.co/hx3GssYD/Chat-GPT-Image-Jun-22-2026-03-25-31-AM.png',
+      'https://i.ibb.co/fzNKpCty/Chat-GPT-Image-Jun-22-2026-03-25-28-AM.png',
+      'https://i.ibb.co/wZF0ZtGW/Chat-GPT-Image-Jun-22-2026-03-26-23-AM.png',
+    ],
+    stock: 0,
+  },
 ];
 
 export default function ProductsPage() {
