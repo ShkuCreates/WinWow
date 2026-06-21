@@ -6,11 +6,12 @@ import { motion } from 'framer-motion';
 import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
-// Seller crypto configuration - UPDATE THESE WITH YOUR REAL ADDRESSES!
+// Seller crypto configuration
 const SELLER_ADDRESSES = {
-  USDT: '0xYourEVMAddressHere', // USDT on Ethereum/Polygon/etc.
-  BTC: 'bc1qYourBitcoinAddressHere', // Bitcoin
-  ETH: '0xYourEthereumAddressHere', // Ethereum
+  USDT: '0xF082C66009e8467C99d9ef03183820ad244F129B', // USDT (EVM)
+  BTC: 'bc1qry6ltzu4hk2euunmm4uq6n89f34sz9j3k283hz', // Bitcoin
+  ETH: '0xF082C66009e8467C99d9ef03183820ad244F129B', // Ethereum
+  LTC: 'LZswPU7o7Spwih9P7mb99iD6v9aL1Zc1aD', // Litecoin
 };
 
 // Mock product data
@@ -75,7 +76,7 @@ export default function ProductClient() {
     email: '',
     phone: '',
   });
-  const [selectedCrypto, setSelectedCrypto] = useState('USDT');
+  const [selectedCrypto, setSelectedCrypto] = useState<'USDT' | 'BTC' | 'ETH' | 'LTC'>('USDT');
 
   const discountedPrice = product.price * (1 - product.discountPercentage / 100);
   const depositAmount = discountedPrice * 0.1;
@@ -311,8 +312,8 @@ export default function ProductClient() {
           {/* Crypto Selector */}
           <div className="mb-8">
             <p className="text-sm text-[#9a958c] mb-3">Select Cryptocurrency</p>
-            <div className="grid grid-cols-3 gap-3">
-              {(['USDT', 'BTC', 'ETH'] as const).map((crypto) => (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {(['USDT', 'BTC', 'ETH', 'LTC'] as const).map((crypto) => (
                 <button
                   key={crypto}
                   onClick={() => setSelectedCrypto(crypto)}
@@ -383,11 +384,18 @@ export default function ProductClient() {
             {/* Block Explorer Link */}
             <div className="mt-4 text-sm text-[#9a958c]">
               <a
-                href={
-                  selectedCrypto === 'BTC'
-                    ? `https://mempool.space/address/${SELLER_ADDRESSES[selectedCrypto]}`
-                    : `https://etherscan.io/address/${SELLER_ADDRESSES[selectedCrypto]}`
-                }
+                href={(() => {
+                  switch (selectedCrypto) {
+                    case 'BTC':
+                      return `https://mempool.space/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                    case 'LTC':
+                      return `https://blockchair.com/litecoin/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                    case 'USDT':
+                    case 'ETH':
+                    default:
+                      return `https://etherscan.io/address/${SELLER_ADDRESSES[selectedCrypto]}`;
+                  }
+                })()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#c9a24b] hover:text-yellow-300 flex items-center justify-center gap-1"
