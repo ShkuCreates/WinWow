@@ -8,13 +8,18 @@ import { Filter, Search } from 'lucide-react';
 const allProducts = [
   {
     id: '1',
-    name: 'Royal Oak Perpetual',
-    brand: 'Audemars Piguet',
-    price: 45000,
-    discountPercentage: 10,
-    thumbnail: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=600&q=80'],
-    stock: 5,
+    name: 'WinWow S8 Balzer Series - Male',
+    brand: 'WinWow',
+    price: 35,
+    discountPercentage: 15,
+    thumbnail: 'https://i.ibb.co/XWd3Y7L2/2.jpg',
+    images: [
+      'https://i.ibb.co/XWd3Y7L2/2.jpg',
+      'https://i.ibb.co/xgQjZ4Z9/1.jpg',
+      'https://i.ibb.co/1d7mY6C9/4.jpg',
+      'https://i.ibb.co/t4vQxZJf/3.jpg',
+    ],
+    stock: 12,
   },
   {
     id: '2',

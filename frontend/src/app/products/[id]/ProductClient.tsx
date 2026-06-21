@@ -18,26 +18,56 @@ const SELLER_ADDRESSES = {
 const productDetails: Record<string, any> = {
   '1': {
     id: '1',
-    name: 'Royal Oak Perpetual',
-    brand: 'Audemars Piguet',
-    price: 45000,
-    discountPercentage: 10,
-    description: 'The Royal Oak Perpetual Calendar is a masterpiece of horology, featuring an octagonal bezel with exposed screws and a stunning perpetual calendar complication.',
+    name: 'WinWow S8 Balzer Series - Male',
+    brand: 'WinWow',
+    price: 35,
+    discountPercentage: 15,
+    description: 'The WinWow S8 Balzer Series blends timeless elegance with modern sophistication. Perfect for any occasion—from formal events to casual outings.',
     specifications: {
-      'Case Material': 'Stainless Steel',
-      'Case Diameter': '41mm',
-      'Movement': 'Automatic',
-      'Water Resistance': '50m',
-      'Glass': 'Sapphire Crystal',
-      'Strap': 'Leather',
+      'Material': 'Premium Cotton Blend',
+      'Fit': 'Slim Fit',
+      'Care': 'Machine Washable',
+      'Available Sizes': 'S, M, L, XL',
+      'Color': 'Classic Black',
     },
-    thumbnail: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=1200&q=80',
+    thumbnail: 'https://i.ibb.co/XWd3Y7L2/2.jpg',
     images: [
-      'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=1200&q=80',
-      'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=1200&q=80',
-      'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=1200&q=80',
+      'https://i.ibb.co/XWd3Y7L2/2.jpg',
+      'https://i.ibb.co/xgQjZ4Z9/1.jpg',
+      'https://i.ibb.co/1d7mY6C9/4.jpg',
+      'https://i.ibb.co/t4vQxZJf/3.jpg',
     ],
-    stock: 5,
+    stock: 12,
+    reviews: [
+      {
+        id: 'r1',
+        user: 'John D.',
+        rating: 5,
+        comment: 'Amazing quality! Fits perfectly and looks even better in person. Highly recommend!',
+        date: '2026-05-15',
+      },
+      {
+        id: 'r2',
+        user: 'Michael R.',
+        rating: 4,
+        comment: 'Great product, fast shipping. Only minor issue is the collar could be a bit stiffer.',
+        date: '2026-05-22',
+      },
+      {
+        id: 'r3',
+        user: 'Sarah K.',
+        rating: 5,
+        comment: 'Bought this for my husband, he loves it! The material is so comfortable.',
+        date: '2026-06-02',
+      },
+      {
+        id: 'r4',
+        user: 'David L.',
+        rating: 5,
+        comment: 'Worth every penny. The fit is perfect and the build quality is top-notch.',
+        date: '2026-06-10',
+      },
+    ],
   },
   '2': {
     id: '2',
@@ -196,13 +226,65 @@ export default function ProductClient() {
             </div>
 
             {/* Specifications */}
-            <div>
+            <div className="mb-12">
               <h3 className="text-xl font-semibold text-[#f5f3ee] mb-4">Specifications</h3>
               <div className="space-y-3">
                 {Object.entries(product.specifications).map(([key, value]) => (
                   <div key={key} className="flex justify-between py-3 border-b border-white/10">
                     <span className="text-[#9a958c]">{key}</span>
                     <span className="text-[#f5f3ee] font-medium">{value as string}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Reviews */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-xl font-semibold text-[#f5f3ee]">Customer Reviews</h3>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={18}
+                        fill={i < Math.floor(4.7) ? "#c9a24b" : "transparent"}
+                        className={i < Math.floor(4.7) ? "text-[#c9a24b]" : "text-[#9a958c]"}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[#f5f3ee] font-medium">4.7</span>
+                  <span className="text-[#9a958c]">({product.reviews.length} reviews)</span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {product.reviews.map((review: any) => (
+                  <div key={review.id} className="glass p-6 rounded-xl">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#c9a24b]/20 flex items-center justify-center">
+                          <span className="text-[#c9a24b] font-semibold">
+                            {review.user.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="text-[#f5f3ee] font-medium">{review.user}</div>
+                          <div className="text-[#9a958c] text-sm">{review.date}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={14}
+                            fill={i < review.rating ? "#c9a24b" : "transparent"}
+                            className={i < review.rating ? "text-[#c9a24b]" : "text-[#9a958c]"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-[#9a958c] leading-relaxed">{review.comment}</p>
                   </div>
                 ))}
               </div>
