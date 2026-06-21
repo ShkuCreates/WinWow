@@ -3,25 +3,25 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Star, ShoppingCart, Check, Calendar, MapPin, CreditCard, User, Mail, Copy, ExternalLink } from 'lucide-react';
+import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
-// Seller crypto configuration - UPDATE THESE WITH YOUR REAL ADDRESSES!
+// Seller crypto configuration
 const SELLER_ADDRESSES = {
-  USDT: '0xF082C66009e8467C99d9ef03183820ad244F129B', // USDT (EVM)
-  BTC: 'bc1qry6ltzu4hk2euunmm4uq6n89f34sz9j3k283hz', // Bitcoin
-  ETH: '0xF082C66009e8467C99d9ef03183820ad244F129B', // Ethereum
-  LTC: 'LZswPU7o7Spwih9P7mb99iD6v9aL1Zc1aD', // Litecoin
+  USDT: '0xF082C66009e8467C99d9ef03183820ad244F129B',
+  BTC: 'bc1qry6ltzu4hk2euunmm4uq6n89f34sz9j3k283hz',
+  ETH: '0xF082C66009e8467C99d9ef03183820ad244F129B',
+  LTC: 'LZswPU7o7Spwih9P7mb99iD6v9aL1Zc1aD',
 };
 
-// Mock product data - ALL PRODUCTS HAVE ALL PROPERTIES
+// Mock product data - ONLY PRODUCT 1 with 15 reviews
 const productDetails: Record<string, any> = {
   '1': {
     id: '1',
     name: 'WinWow S8 Balzer Series - Male',
     brand: 'WinWow',
     price: 35,
-    discountPercentage: 15,
+    discountPercentage: 15, // Pre-booking discount
     description: 'The WinWow S8 Balzer Series blends timeless elegance with modern sophistication. Perfect for any occasion—from formal events to casual outings.',
     specifications: {
       'Material': 'Premium Cotton Blend',
@@ -37,134 +37,23 @@ const productDetails: Record<string, any> = {
       'https://i.ibb.co/1d7mY6C9/4.jpg',
       'https://i.ibb.co/t4vQxZJf/3.jpg',
     ],
-    stock: 12,
+    stock: 0, // Out of stock, pre-booking only
     reviews: [
-      {
-        id: 'r1',
-        user: 'John D.',
-        rating: 5,
-        comment: 'Amazing quality! Fits perfectly and looks even better in person. Highly recommend!',
-        date: '2026-05-15',
-      },
-      {
-        id: 'r2',
-        user: 'Michael R.',
-        rating: 4,
-        comment: 'Great product, fast shipping. Only minor issue is the collar could be a bit stiffer.',
-        date: '2026-05-22',
-      },
-      {
-        id: 'r3',
-        user: 'Sarah K.',
-        rating: 5,
-        comment: 'Bought this for my husband, he loves it! The material is so comfortable.',
-        date: '2026-06-02',
-      },
-      {
-        id: 'r4',
-        user: 'David L.',
-        rating: 5,
-        comment: 'Worth every penny. The fit is perfect and the build quality is top-notch.',
-        date: '2026-06-10',
-      },
-    ],
-  },
-  '2': {
-    id: '2',
-    name: 'Submariner Date',
-    brand: 'Rolex',
-    price: 12500,
-    discountPercentage: 0,
-    description: 'The Rolex Submariner is the reference among divers\' watches. Recognizable by its unidirectional rotating bezel and luminous display.',
-    specifications: {
-      'Case Material': 'Oystersteel',
-      'Case Diameter': '41mm',
-      'Movement': 'Perpetual, Mechanical',
-      'Water Resistance': '300m',
-      'Glass': 'Sapphire Crystal',
-      'Strap': 'Oyster Bracelet',
-    },
-    thumbnail: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=600&q=80'],
-    stock: 3,
-    reviews: [
-      {
-        id: 'r1',
-        user: 'Alex M.',
-        rating: 5,
-        comment: 'Iconic watch, looks even better in person!',
-        date: '2026-04-18',
-      },
-      {
-        id: 'r2',
-        user: 'Jessica W.',
-        rating: 5,
-        comment: 'Bought this for my boyfriend, he wears it every day.',
-        date: '2026-05-05',
-      },
-    ],
-  },
-  '3': {
-    id: '3',
-    name: 'Nautilus Blue',
-    brand: 'Patek Philippe',
-    price: 85000,
-    discountPercentage: 5,
-    description: 'The Patek Philippe Nautilus is a timeless classic with its distinctive porthole design and elegant blue dial.',
-    specifications: {
-      'Case Material': 'Stainless Steel',
-      'Case Diameter': '40mm',
-      'Movement': 'Automatic',
-      'Water Resistance': '120m',
-      'Glass': 'Sapphire Crystal',
-      'Strap': 'Integrated Bracelet',
-    },
-    thumbnail: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80'],
-    stock: 2,
-    reviews: [
-      {
-        id: 'r1',
-        user: 'Robert T.',
-        rating: 5,
-        comment: 'Absolutely stunning watch, worth every penny.',
-        date: '2026-03-25',
-      },
-    ],
-  },
-  '4': {
-    id: '4',
-    name: 'Speedmaster Professional',
-    brand: 'Omega',
-    price: 6500,
-    discountPercentage: 15,
-    description: 'The Omega Speedmaster Professional, also known as the "Moonwatch", has a rich history in space exploration.',
-    specifications: {
-      'Case Material': 'Stainless Steel',
-      'Case Diameter': '42mm',
-      'Movement': 'Manual Wind',
-      'Water Resistance': '50m',
-      'Glass': 'Hesalite Crystal',
-      'Strap': 'Leather',
-    },
-    thumbnail: 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&q=80'],
-    stock: 8,
-    reviews: [
-      {
-        id: 'r1',
-        user: 'Chris P.',
-        rating: 5,
-        comment: 'A true classic, love the manual wind movement!',
-        date: '2026-02-10',
-      },
-      {
-        id: 'r2',
-        user: 'Amanda S.',
-        rating: 4,
-        comment: 'Beautiful watch, very comfortable on the wrist.',
-        date: '2026-04-22',
-      },
+      { id: 'r1', user: 'John D.', rating: 5, comment: 'Amazing quality! Fits perfectly and looks even better in person. Highly recommend!', date: '2026-05-15' },
+      { id: 'r2', user: 'Michael R.', rating: 4, comment: 'Great product, fast shipping. Only minor issue is the collar could be a bit stiffer.', date: '2026-05-22' },
+      { id: 'r3', user: 'Sarah K.', rating: 5, comment: 'Bought this for my husband, he loves it! The material is so comfortable.', date: '2026-06-02' },
+      { id: 'r4', user: 'David L.', rating: 5, comment: 'Worth every penny. The fit is perfect and the build quality is top-notch.', date: '2026-06-10' },
+      { id: 'r5', user: 'Emma W.', rating: 5, comment: 'Absolutely stunning! Gets compliments every time he wears it.', date: '2026-06-15' },
+      { id: 'r6', user: 'Chris P.', rating: 4, comment: 'Excellent craftsmanship, would definitely buy from this brand again.', date: '2026-06-20' },
+      { id: 'r7', user: 'Lisa M.', rating: 5, comment: 'The fabric feels luxurious, way better than expected!', date: '2026-05-30' },
+      { id: 'r8', user: 'Tom H.', rating: 5, comment: 'Perfect for formal events, very elegant and comfortable.', date: '2026-06-05' },
+      { id: 'r9', user: 'Anna S.', rating: 5, comment: 'Great value for money, quality is outstanding!', date: '2026-06-18' },
+      { id: 'r10', user: 'Mark T.', rating: 4, comment: 'Good product, shipping took a bit longer but worth the wait.', date: '2026-06-12' },
+      { id: 'r11', user: 'Jessica W.', rating: 5, comment: 'Bought as a gift, recipient was extremely happy!', date: '2026-05-25' },
+      { id: 'r12', user: 'Ryan M.', rating: 5, comment: 'The fit is perfect, true to size.', date: '2026-06-08' },
+      { id: 'r13', user: 'Sophie L.', rating: 5, comment: 'Absolutely love the design and quality!', date: '2026-06-21' },
+      { id: 'r14', user: 'Alex K.', rating: 4, comment: 'Great blazer, would buy in another color too.', date: '2026-06-14' },
+      { id: 'r15', user: 'Natalie J.', rating: 5, comment: 'This is exactly what I was looking for! 10/10', date: '2026-06-19' },
     ],
   },
 };
@@ -183,24 +72,10 @@ export default function ProductClient() {
     phone: '',
   });
   const [selectedCrypto, setSelectedCrypto] = useState<'USDT' | 'BTC' | 'ETH' | 'LTC'>('USDT');
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const discountedPrice = product.price * (1 - product.discountPercentage / 100);
-  const depositAmount = discountedPrice * 0.1;
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep('payment');
-  };
-
-  const handlePayment = () => {
-    setTimeout(() => {
-      setStep('success');
-    }, 2000);
-  };
-
-  const handleGoHome = () => {
-    router.push('/');
-  };
+  const visibleReviews = showAllReviews ? product.reviews : product.reviews.slice(0, 5);
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -256,15 +131,9 @@ export default function ProductClient() {
             </div>
 
             <div className="flex items-center gap-3 mb-6">
-              {product.discountPercentage > 0 ? (
-                <>
-                  <span className="text-4xl font-bold text-[#f5f3ee]">${discountedPrice.toLocaleString()}</span>
-                  <span className="text-2xl text-[#9a958c] line-through">${product.price.toLocaleString()}</span>
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">{product.discountPercentage}% OFF</span>
-                </>
-              ) : (
-                <span className="text-4xl font-bold text-[#f5f3ee]">${product.price.toLocaleString()}</span>
-              )}
+              <span className="text-4xl font-bold text-[#f5f3ee]">${discountedPrice.toLocaleString()}</span>
+              <span className="text-2xl text-[#9a958c] line-through">${product.price.toLocaleString()}</span>
+              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Pre-Book - 15% OFF</span>
             </div>
 
             <p className="text-[#9a958c] mb-6 leading-relaxed">{product.description}</p>
@@ -273,15 +142,15 @@ export default function ProductClient() {
             <div className="glass rounded-2xl p-6 mb-8">
               <h3 className="text-xl font-semibold text-[#f5f3ee] mb-4 flex items-center gap-2">
                 <Calendar size={24} className="text-[#c9a24b]" />
-                Pre-book Now
+                Pre-Book Now
               </h3>
               <p className="text-[#9a958c] mb-4">
-                Secure your watch with a 10% deposit. The remaining balance will be charged before shipping.
+                Currently out of stock! Secure your order with pre-booking and get 15% off.
               </p>
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
-                <span className="text-[#9a958c]">Deposit Amount</span>
+                <span className="text-[#9a958c]">Pre-Booking Price</span>
                 <span className="text-2xl font-bold text-[#c9a24b]">
-                  ${depositAmount.toLocaleString()}
+                  ${discountedPrice.toLocaleString()}
                 </span>
               </div>
               <button
@@ -289,7 +158,7 @@ export default function ProductClient() {
                 className="w-full premium-button flex items-center justify-center gap-2 py-4 text-lg"
               >
                 <ShoppingCart size={24} />
-                Pre-book for ${depositAmount.toLocaleString()}
+                Pre-Book for ${discountedPrice.toLocaleString()}
               </button>
             </div>
 
@@ -322,7 +191,7 @@ export default function ProductClient() {
               </div>
 
               <div className="space-y-6">
-                {product.reviews.map((review: any) => (
+                {visibleReviews.map((review: any) => (
                   <div key={review.id} className="glass p-6 rounded-xl">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -346,6 +215,27 @@ export default function ProductClient() {
                   </div>
                 ))}
               </div>
+
+              {product.reviews.length > 5 && (
+                <div className="mt-8 text-center">
+                  <button
+                    onClick={() => setShowAllReviews(!showAllReviews)}
+                    className="btn-ghost flex items-center gap-2 mx-auto"
+                  >
+                    {showAllReviews ? (
+                      <>
+                        Show Less Reviews
+                        <ChevronUp size={16} />
+                      </>
+                    ) : (
+                      <>
+                        Show {product.reviews.length - 5} More Reviews
+                        <ChevronDown size={16} />
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
@@ -365,7 +255,7 @@ export default function ProductClient() {
             ← Back to Product
           </button>
           <h2 className="text-3xl font-bold text-[#f5f3ee] mb-6">Your Information</h2>
-          <form onSubmit={handleFormSubmit} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); setStep('payment'); }} className="space-y-4">
             <div>
               <label className="block text-sm text-[#9a958c] mb-2">Full Name</label>
               <div className="relative">
@@ -444,8 +334,8 @@ export default function ProductClient() {
               </div>
             </div>
             <div className="flex justify-between items-center pt-4 border-t border-white/10">
-              <span className="text-[#9a958c]">Deposit Amount</span>
-              <span className="text-2xl font-bold text-[#f5f3ee]">${depositAmount.toLocaleString()}</span>
+              <span className="text-[#9a958c]">Total Amount</span>
+              <span className="text-2xl font-bold text-[#f5f3ee]">${discountedPrice.toLocaleString()}</span>
             </div>
           </div>
 
@@ -506,19 +396,19 @@ export default function ProductClient() {
               <p className="font-semibold text-[#f5f3ee]">Important Instructions:</p>
               <ol className="list-decimal list-inside space-y-2">
                 <li>Copy the address or scan the QR code above</li>
-                <li>Send exactly <span className="text-[#c9a24b] font-semibold">${depositAmount.toLocaleString()}</span> worth of {selectedCrypto}</li>
-                <li>Wait for 1-6 block confirmations (usually 5-30 minutes)</li>
+                <li>Send exactly <span className="text-[#c9a24b] font-semibold">${discountedPrice.toLocaleString()}</span> worth of {selectedCrypto}</li>
+                <li>Wait for 1-6 block confirmations</li>
                 <li>Click "Check Payment" to verify your payment</li>
               </ol>
             </div>
 
             {/* Check Payment Button */}
             <button
-              onClick={handlePayment}
+              onClick={() => setStep('success')}
               className="w-full premium-button flex items-center justify-center gap-2 py-4 text-lg"
             >
               <Check size={20} />
-              I've Sent Payment - Check Confirmation
+              I've Sent Payment
             </button>
 
             {/* Block Explorer Link */}
@@ -557,10 +447,10 @@ export default function ProductClient() {
           </div>
           <h2 className="text-4xl font-bold text-[#f5f3ee] mb-4">Order Confirmed!</h2>
           <p className="text-[#9a958c] mb-8 text-lg">
-            Thank you for your pre-booking! Your watch will be delivered soon.
+            Thank you for your pre-booking! Your order will be delivered soon.
           </p>
           <button
-            onClick={handleGoHome}
+            onClick={() => router.push('/')}
             className="premium-button px-8 py-4 text-lg"
           >
             Continue Shopping

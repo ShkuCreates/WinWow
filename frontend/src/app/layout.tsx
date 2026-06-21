@@ -1,23 +1,26 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
+import type { Metadata } from 'next';
+import { Inter, Playfair_Display } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/Header';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "WinWow - Premium Luxury Watches",
-  description: "Discover exclusive luxury watches with pre-booking options",
+  title: 'WinWow - Premium Luxury Watches',
+  description: 'Discover exclusive luxury watches with pre-booking options',
+  icons: {
+    icon: 'https://i.ibb.co/Fk5mkXpj/favicon.png',
+  },
 };
 
 export default function RootLayout({
