@@ -26,8 +26,8 @@ const mockProducts = [
 ];
 
 const AnimatedCounter = ({ target, suffix }: { target: number; suffix?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '0px' });
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -51,9 +51,9 @@ const AnimatedCounter = ({ target, suffix }: { target: number; suffix?: string }
   }, [isInView, target]);
 
   return (
-    <span ref={ref}>
+    <div ref={ref} className="inline-block">
       {count}{suffix || ''}
-    </span>
+    </div>
   );
 };
 
