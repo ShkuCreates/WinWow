@@ -17,13 +17,13 @@ export default function ProductCard({ product }: { product: Product }) {
   const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
 
   return (
-    <div className="product-card glass rounded-2xl overflow-hidden">
+    <div className="product-card overflow-hidden">
       <div className="relative aspect-square overflow-hidden">
         <Image
           src={product.thumbnail}
           alt={product.name}
           fill
-          className="object-cover"
+          className="object-cover product-card-image"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         <button className="wishlist-btn absolute top-4 right-4 p-2 glass-panel rounded-full">

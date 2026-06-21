@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '@/components/ProductCard';
-import { Search } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
+import { Search, Watch } from 'lucide-react';
 
-// Mock products data - ONLY PRODUCT 1
 const allProducts = [
   {
     id: '1',
@@ -26,43 +27,104 @@ const allProducts = [
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredProducts = allProducts.filter(product => 
+  const filteredProducts = allProducts.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="container mx-auto px-6 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-[#f5f3ee] mb-4">Our Collection</h1>
-        <p className="text-[#9a958c]">Discover our exclusive selection of luxury watches</p>
-      </div>
+    <div className="min-h-screen">
+      {/* Ambient header */}
+      <section className="collection-header grain-overlay">
+        <div className="collection-header-glow" />
+        <div className="container mx-auto px-6 py-16 relative z-10 w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center mb-10"
+          >
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#f5f3ee] mb-4">
+              Our Collection
+            </h1>
+            <p className="text-[#9a958c] text-lg">
+              Discover our exclusive selection of luxury watches
+            </p>
+            <div className="section-header-rule" />
+          </motion.div>
 
-      {/* Search Bar */}
-      <div className="glass rounded-xl p-6 mb-10">
-        <div className="relative max-w-2xl mx-auto">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a958c]" size={20} />
-          <input
-            type="text"
-            placeholder="Search products by name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-2xl mx-auto"
+          >
+            <div className="search-bar px-4 py-3">
+              <div className="relative">
+                <Search className="search-icon absolute left-2 top-1/2 -translate-y-1/2" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search products by name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-transparent text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none"
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Products Grid */}
-      {filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+      {/* Product grid */}
+      <section className="products-grid-section py-16">
+        <div className="container mx-auto px-6">
+          <AnimatePresence mode="popLayout">
+            {filteredProducts.length > 0 ? (
+              <motion.div
+                key="grid"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+              >
+                {filteredProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.35, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <ScrollReveal delay={index * 100}>
+                      <ProductCard product={product} />
+                    </ScrollReveal>
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="empty-state text-center py-20 px-8 max-w-lg mx-auto"
+              >
+                <div className="w-20 h-20 rounded-full bg-[#c9a24b]/10 flex items-center justify-center mx-auto mb-6">
+                  <Watch size={36} className="text-[#c9a24b]" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-xl font-medium text-[#f5f3ee] mb-2">
+                  No timepieces match your search
+                </h3>
+                <p className="text-[#9a958c]">
+                  Try a different name or browse our full collection.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      ) : (
-        <div className="text-center py-20 glass rounded-xl">
-          <p className="text-xl text-[#9a958c]">No products found matching "{searchQuery}"</p>
-        </div>
-      )}
+      </section>
     </div>
   );
 }

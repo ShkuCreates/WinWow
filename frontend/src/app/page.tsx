@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Star, TrendingUp, Heart, Shield, Truck, Award, CheckCircle } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
+import ScrollReveal from '@/components/ScrollReveal';
 import { useEffect, useRef, useState } from 'react';
 
 // Mock products data - ONLY PRODUCT 1
@@ -135,7 +136,7 @@ export default function Home() {
       </section>
 
       {/* Featured Collection */}
-      <section className="featured-section py-24">
+      <section className="featured-section grain-overlay py-24">
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl text-[#f5f3ee] mb-3">
@@ -144,19 +145,14 @@ export default function Home() {
             <p className="text-[#9a958c]">
               Handpicked timepieces for the discerning collector
             </p>
+            <div className="section-header-rule" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {mockProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ delay: index * 0.1 }}
-              >
+              <ScrollReveal key={product.id} delay={index * 100}>
                 <ProductCard product={product} />
-              </motion.div>
+              </ScrollReveal>
             ))}
           </div>
 
