@@ -11,29 +11,38 @@ export default function Header() {
   return (
     <header className="site-header px-6 py-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl font-medium tracking-[0.03em] text-[#f5f3ee] relative pb-1">
+        {/* Rounded Glass Container for Header Content */}
+        <div className="glass-panel px-6 py-3 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="font-serif text-xl md:text-2xl font-medium tracking-[0.03em] text-[#f5f3ee] relative pb-1">
             WinWow
-            <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[#c9a24b] opacity-70"></span>
           </Link>
           
-          <nav className="hidden md:flex items-center gap-8">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-3">
             {['Home', 'Products'].map((item) => (
-              <NavLink key={item} href={item === 'Home' ? '/' : '/products'}>
+              <Link 
+                key={item} 
+                href={item === 'Home' ? '/' : '/products'}
+                className="relative group px-4 py-2 rounded-xl text-sm uppercase tracking-[0.12em] text-[#9a958c] hover:text-[#f5f3ee] transition-all hover:bg-white/10"
+              >
                 {item}
-              </NavLink>
+                <span className="absolute bottom-1 left-1/2 w-0 h-[1.5px] bg-[#c9a24b] transition-all duration-300 ease-out -translate-x-1/2 group-hover:w-full"></span>
+              </Link>
             ))}
           </nav>
           
-          <div className="hidden md:flex items-center gap-4">
-            <button className="p-2 text-[#f5f3ee] hover:text-[#c9a24b] transition-colors">
+          {/* Desktop Icons */}
+          <div className="hidden md:flex items-center gap-2">
+            <button className="p-2.5 rounded-xl text-[#f5f3ee] hover:text-[#c9a24b] transition-all hover:bg-white/10">
               <Heart size={20} strokeWidth={1.5} />
             </button>
           </div>
 
+          {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)} 
-            className="md:hidden text-[#f5f3ee]"
+            className="md:hidden glass-panel p-2 text-[#f5f3ee]"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -55,17 +64,5 @@ export default function Header() {
         </motion.div>
       )}
     </header>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link 
-      href={href} 
-      className="relative group text-sm uppercase tracking-[0.12em] text-[#9a958c] hover:text-[#f5f3ee] transition-colors py-2"
-    >
-      {children}
-      <span className="absolute bottom-0 left-1/2 w-0 h-[1.5px] bg-[#c9a24b] transition-all duration-300 ease-out -translate-x-1/2 group-hover:w-full"></span>
-    </Link>
   );
 }
