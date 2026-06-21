@@ -14,46 +14,46 @@ const SELLER_ADDRESSES = {
   LTC: 'LZswPU7o7Spwih9P7mb99iD6v9aL1Zc1aD',
 };
 
-// Mock product data - ONLY PRODUCT 1 with 15 reviews
+// Mock product data - ONLY PRODUCT 1 with exact details
 const productDetails: Record<string, any> = {
   '1': {
     id: '1',
     name: 'WinWow S8 Balzer Series - Male',
     brand: 'WinWow',
     price: 35,
-    discountPercentage: 15, // Pre-booking discount
-    description: 'The WinWow S8 Balzer Series blends timeless elegance with modern sophistication. Perfect for any occasion—from formal events to casual outings.',
+    discountPercentage: 15,
+    description: 'The WinWow S8 Balzer Series is a refined men\'s timepiece that blends classic horology with modern design. A bold dial, premium finish, and comfortable fit make it ideal for daily wear or formal occasions — pre-book now at 15% off.',
     specifications: {
-      'Material': 'Premium Cotton Blend',
-      'Fit': 'Slim Fit',
-      'Care': 'Machine Washable',
-      'Available Sizes': 'S, M, L, XL',
-      'Color': 'Classic Black',
+      'Movement': 'Precision Quartz',
+      'Case Material': 'Stainless Steel',
+      'Case Diameter': '42mm',
+      'Water Resistance': '5 ATM',
+      'Strap': 'Genuine Leather',
     },
-    thumbnail: 'https://i.ibb.co/XWd3Y7L2/2.jpg',
+    thumbnail: 'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
     images: [
-      'https://i.ibb.co/XWd3Y7L2/2.jpg',
-      'https://i.ibb.co/xgQjZ4Z9/1.jpg',
-      'https://i.ibb.co/1d7mY6C9/4.jpg',
-      'https://i.ibb.co/t4vQxZJf/3.jpg',
+      'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
+      'https://i.ibb.co/RGtSPMsz/Chat-GPT-Image-Jun-22-2026-01-51-39-AM.png',
+      'https://i.ibb.co/bjpqDgjH/Chat-GPT-Image-Jun-22-2026-01-51-37-AM.png',
+      'https://i.ibb.co/67XfMrvX/Chat-GPT-Image-Jun-22-2026-01-51-34-AM.png',
     ],
     stock: 0, // Out of stock, pre-booking only
     reviews: [
-      { id: 'r1', user: 'John D.', rating: 5, comment: 'Amazing quality! Fits perfectly and looks even better in person. Highly recommend!', date: '2026-05-15' },
-      { id: 'r2', user: 'Michael R.', rating: 4, comment: 'Great product, fast shipping. Only minor issue is the collar could be a bit stiffer.', date: '2026-05-22' },
-      { id: 'r3', user: 'Sarah K.', rating: 5, comment: 'Bought this for my husband, he loves it! The material is so comfortable.', date: '2026-06-02' },
-      { id: 'r4', user: 'David L.', rating: 5, comment: 'Worth every penny. The fit is perfect and the build quality is top-notch.', date: '2026-06-10' },
-      { id: 'r5', user: 'Emma W.', rating: 5, comment: 'Absolutely stunning! Gets compliments every time he wears it.', date: '2026-06-15' },
-      { id: 'r6', user: 'Chris P.', rating: 4, comment: 'Excellent craftsmanship, would definitely buy from this brand again.', date: '2026-06-20' },
-      { id: 'r7', user: 'Lisa M.', rating: 5, comment: 'The fabric feels luxurious, way better than expected!', date: '2026-05-30' },
-      { id: 'r8', user: 'Tom H.', rating: 5, comment: 'Perfect for formal events, very elegant and comfortable.', date: '2026-06-05' },
-      { id: 'r9', user: 'Anna S.', rating: 5, comment: 'Great value for money, quality is outstanding!', date: '2026-06-18' },
-      { id: 'r10', user: 'Mark T.', rating: 4, comment: 'Good product, shipping took a bit longer but worth the wait.', date: '2026-06-12' },
-      { id: 'r11', user: 'Jessica W.', rating: 5, comment: 'Bought as a gift, recipient was extremely happy!', date: '2026-05-25' },
-      { id: 'r12', user: 'Ryan M.', rating: 5, comment: 'The fit is perfect, true to size.', date: '2026-06-08' },
-      { id: 'r13', user: 'Sophie L.', rating: 5, comment: 'Absolutely love the design and quality!', date: '2026-06-21' },
-      { id: 'r14', user: 'Alex K.', rating: 4, comment: 'Great blazer, would buy in another color too.', date: '2026-06-14' },
-      { id: 'r15', user: 'Natalie J.', rating: 5, comment: 'This is exactly what I was looking for! 10/10', date: '2026-06-19' },
+      { id: 'r1', user: 'James H.', rating: 5, comment: 'Stunning timepiece! The craftsmanship on this S8 is incredible for the price. Pre-booked and couldn\'t be happier.', date: '2026-05-15' },
+      { id: 'r2', user: 'Marcus T.', rating: 5, comment: 'Elegant design that gets noticed everywhere. The dial detail is far better than I expected at $35.', date: '2026-05-22' },
+      { id: 'r3', user: 'David K.', rating: 5, comment: 'My third WinWow watch and this might be the best one yet. Build quality is solid and feels premium on the wrist.', date: '2026-06-02' },
+      { id: 'r4', user: 'Robert L.', rating: 4, comment: 'Beautiful watch overall. Strap feels a bit stiff initially but breaks in nicely after a week of wear.', date: '2026-06-10' },
+      { id: 'r5', user: 'Ahmed R.', rating: 5, comment: 'Pre-booked without hesitation. Arrived exactly as shown — premium look and feel. Highly recommend.', date: '2026-06-15' },
+      { id: 'r6', user: 'Carlos M.', rating: 5, comment: 'The gold accents on the bezel are perfect. Looks like a much more expensive watch on the wrist.', date: '2026-06-20' },
+      { id: 'r7', user: 'Daniel W.', rating: 5, comment: 'Fast delivery after pre-book. Keeps accurate time and the weight feels substantial without being heavy.', date: '2026-05-30' },
+      { id: 'r8', user: 'Tyler B.', rating: 4, comment: 'Great value for a luxury-style watch. Minor scratch on the box but the watch itself is flawless.', date: '2026-06-05' },
+      { id: 'r9', user: 'Kevin S.', rating: 5, comment: 'Bought for my brother\'s birthday — he absolutely loves it. Will pre-order the next series too.', date: '2026-06-18' },
+      { id: 'r10', user: 'Brandon F.', rating: 5, comment: 'The S8 Balzer Series has that classic men\'s look. Comfortable all day wear, even at the office.', date: '2026-06-12' },
+      { id: 'r11', user: 'Jason P.', rating: 4, comment: 'Very satisfied with the purchase. Wish the clasp was slightly easier to adjust, otherwise perfect.', date: '2026-05-25' },
+      { id: 'r12', user: 'Omar N.', rating: 5, comment: 'Exceeded expectations for a pre-book item. WinWow really delivered on quality this time.', date: '2026-06-08' },
+      { id: 'r13', user: 'Ethan C.', rating: 5, comment: 'Clean dial, smooth movement feel. This is my daily driver now — gets compliments constantly.', date: '2026-06-21' },
+      { id: 'r14', user: 'Lucas G.', rating: 4, comment: 'Solid watch for the price point. Pre-book discount made it an easy decision. Would buy again.', date: '2026-06-14' },
+      { id: 'r15', user: 'Nathan J.', rating: 5, comment: 'Exactly what I wanted — masculine, refined, and reliable. Best pre-book purchase I\'ve made. 10/10.', date: '2026-06-19' },
     ],
   },
 };
@@ -397,7 +397,7 @@ export default function ProductClient() {
               <ol className="list-decimal list-inside space-y-2">
                 <li>Copy the address or scan the QR code above</li>
                 <li>Send exactly <span className="text-[#c9a24b] font-semibold">${discountedPrice.toLocaleString()}</span> worth of {selectedCrypto}</li>
-                <li>Wait for 1-6 block confirmations</li>
+                <li>Wait for 1-6 block confirmations (usually 5-30 minutes)</li>
                 <li>Click "Check Payment" to verify your payment</li>
               </ol>
             </div>
@@ -447,7 +447,7 @@ export default function ProductClient() {
           </div>
           <h2 className="text-4xl font-bold text-[#f5f3ee] mb-4">Order Confirmed!</h2>
           <p className="text-[#9a958c] mb-8 text-lg">
-            Thank you for your pre-booking! Your order will be delivered soon.
+            Thank you for your pre-booking! Product updates and delivery notifications will be sent to the contact details you provided.
           </p>
           <button
             onClick={() => router.push('/')}

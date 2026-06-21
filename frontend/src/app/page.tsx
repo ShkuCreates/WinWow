@@ -14,12 +14,12 @@ const mockProducts = [
     brand: 'WinWow',
     price: 35,
     discountPercentage: 15,
-    thumbnail: 'https://i.ibb.co/XWd3Y7L2/2.jpg',
+    thumbnail: 'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
     images: [
-      'https://i.ibb.co/XWd3Y7L2/2.jpg',
-      'https://i.ibb.co/xgQjZ4Z9/1.jpg',
-      'https://i.ibb.co/1d7mY6C9/4.jpg',
-      'https://i.ibb.co/t4vQxZJf/3.jpg',
+      'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
+      'https://i.ibb.co/RGtSPMsz/Chat-GPT-Image-Jun-22-2026-01-51-39-AM.png',
+      'https://i.ibb.co/bjpqDgjH/Chat-GPT-Image-Jun-22-2026-01-51-37-AM.png',
+      'https://i.ibb.co/67XfMrvX/Chat-GPT-Image-Jun-22-2026-01-51-34-AM.png',
     ],
     stock: 0, // Out of stock, pre-booking only
   },
