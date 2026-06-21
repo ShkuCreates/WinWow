@@ -7,14 +7,14 @@ interface Product {
   name: string;
   brand: string;
   price: number;
-  discountPercentage: number;
+  preBookDepositPercentage: number;
   thumbnail: string;
   images: string[];
   stock: number;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
-  const discountedPrice = product.price * (1 - product.discountPercentage / 100);
+  const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
 
   return (
     <div className="product-card glass rounded-2xl overflow-hidden">
@@ -29,9 +29,9 @@ export default function ProductCard({ product }: { product: Product }) {
         <button className="wishlist-btn absolute top-4 right-4 p-2 glass-panel rounded-full">
           <Heart size={20} className="text-[#f5f3ee]" strokeWidth={1.5} />
         </button>
-        {product.discountPercentage > 0 && (
+        {product.stock === 0 && (
           <div className="discount-shimmer absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            {product.discountPercentage}% OFF
+            Pre-Book
           </div>
         )}
       </div>
@@ -40,21 +40,13 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="text-sm text-[#9a958c] mb-1">{product.brand}</div>
         <h3 className="text-xl font-medium text-[#f5f3ee] mb-2">{product.name}</h3>
         
-        <div className="flex items-center gap-3 mb-4">
-          {product.discountPercentage > 0 ? (
-            <>
-              <span className="text-2xl font-bold text-[#f5f3ee]">
-                ${discountedPrice.toLocaleString()}
-              </span>
-              <span className="text-lg text-[#9a958c] line-through">
-                ${product.price.toLocaleString()}
-              </span>
-            </>
-          ) : (
-            <span className="text-2xl font-bold text-[#f5f3ee]">
-              ${product.price.toLocaleString()}
-            </span>
-          )}
+        <div className="flex flex-col gap-1 mb-4">
+          <span className="text-2xl font-bold text-[#f5f3ee]">
+            ${product.price.toLocaleString()}
+          </span>
+          <span className="text-sm text-[#c9a24b]">
+            Pre-book with ${preBookDeposit.toFixed(2)} ({product.preBookDepositPercentage}% deposit)
+          </span>
         </div>
         
         <div className="flex gap-3">

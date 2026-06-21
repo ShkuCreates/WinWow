@@ -11,7 +11,7 @@ const allProducts = [
     name: 'WinWow S8 Balzer Series - Male',
     brand: 'WinWow',
     price: 35,
-    discountPercentage: 15,
+    preBookDepositPercentage: 15,
     thumbnail: 'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
     images: [
       'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
