@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ProductCard from '@/components/ProductCard';
-import { Filter, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 // Mock products data (expanded)
 const allProducts = [
@@ -51,40 +51,14 @@ const allProducts = [
     images: ['https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&q=80'],
     stock: 8,
   },
-  {
-    id: '5',
-    name: 'Portugieser Chronograph',
-    brand: 'IWC',
-    price: 11000,
-    discountPercentage: 0,
-    thumbnail: 'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=600&q=80'],
-    stock: 4,
-  },
-  {
-    id: '6',
-    name: 'Datejust 41',
-    brand: 'Rolex',
-    price: 9500,
-    discountPercentage: 8,
-    thumbnail: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=80',
-    images: ['https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=80'],
-    stock: 6,
-  },
 ];
 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState('All');
 
-  const brands = ['All', 'Rolex', 'Omega', 'Audemars Piguet', 'Patek Philippe', 'IWC'];
-
-  const filteredProducts = allProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.brand.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesBrand = selectedBrand === 'All' || product.brand === selectedBrand;
-    return matchesSearch && matchesBrand;
-  });
+  const filteredProducts = allProducts.filter(product => 
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -93,32 +67,17 @@ export default function ProductsPage() {
         <p className="text-[#9a958c]">Discover our exclusive selection of luxury watches</p>
       </div>
 
-      {/* Filters */}
+      {/* Search Bar Only */}
       <div className="glass rounded-xl p-6 mb-10">
-        <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a958c]" size={20} />
-            <input
-              type="text"
-              placeholder="Search watches..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
-            />
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Filter size={20} className="text-[#9a958c]" />
-            <select
-              value={selectedBrand}
-              onChange={(e) => setSelectedBrand(e.target.value)}
-              className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-[#f5f3ee] focus:outline-none focus:border-white/30"
-            >
-              {brands.map(brand => (
-                <option key={brand} value={brand} className="bg-gray-900">{brand}</option>
-              ))}
-            </select>
-          </div>
+        <div className="relative max-w-2xl mx-auto">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a958c]" size={20} />
+          <input
+            type="text"
+            placeholder="Search products by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-[#f5f3ee] placeholder-[#9a958c] focus:outline-none focus:border-white/30"
+          />
         </div>
       </div>
 
@@ -131,7 +90,7 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className="text-center py-20 glass rounded-xl">
-          <p className="text-xl text-[#9a958c]">No products found matching your criteria</p>
+          <p className="text-xl text-[#9a958c]">No products found matching "{searchQuery}"</p>
         </div>
       )}
     </div>
