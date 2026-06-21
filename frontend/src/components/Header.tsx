@@ -1,24 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { ShoppingBag, Menu, X, User, Heart } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
-    <header className={`site-header ${isScrolled ? 'scrolled' : ''} px-6 py-4`}>
+    <header className="site-header px-6 py-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-medium tracking-[0.03em] text-[#f5f3ee] relative pb-1">
@@ -35,15 +26,9 @@ export default function Header() {
           </nav>
           
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/login" className="p-2 text-[#f5f3ee] hover:text-[#c9a24b] transition-colors">
-              <User size={20} strokeWidth={1.5} />
-            </Link>
             <button className="p-2 text-[#f5f3ee] hover:text-[#c9a24b] transition-colors">
               <Heart size={20} strokeWidth={1.5} />
             </button>
-            <Link href="/login" className="btn-gold text-sm px-6 py-3">
-              Sign In
-            </Link>
           </div>
 
           <button 
@@ -66,7 +51,6 @@ export default function Header() {
           <div className="flex flex-col items-center justify-center h-full gap-8">
             <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif text-[#f5f3ee] uppercase tracking-[0.2em]">Home</Link>
             <Link href="/products" onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif text-[#f5f3ee] uppercase tracking-[0.2em]">Products</Link>
-            <Link href="/login" onClick={() => setIsMenuOpen(false)} className="btn-gold mt-8 text-lg">Sign In</Link>
           </div>
         </motion.div>
       )}
