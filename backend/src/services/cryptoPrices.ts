@@ -13,6 +13,12 @@ const priceCache: { rates: Record<CryptoCurrency, number>; fetchedAt: number } =
 };
 
 const CACHE_TTL_MS = 60 * 1000;
+const FALLBACK_USD_RATES: Record<CryptoCurrency, number> = {
+  BTC: 60000,
+  ETH: 3500,
+  USDT: 1,
+  LTC: 100,
+};
 
 export async function getUsdRates(): Promise<Record<CryptoCurrency, number>> {
   const now = Date.now();
@@ -21,25 +27,38 @@ export async function getUsdRates(): Promise<Record<CryptoCurrency, number>> {
   }
 
   const ids = Object.values(COINGECKO_IDS).join(',');
-  const response = await fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
-  );
 
-  if (!response.ok) {
-    throw new Error('Unable to fetch crypto prices');
+  try {
+    const response = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
+    );
+
+    if (!response.ok) {
+      throw new Error(`CoinGecko responded with ${response.status}`);
+    }
+
+    const data = (await response.json()) as Record<string, { usd: number }>;
+
+    priceCache.rates = {
+      BTC: data[COINGECKO_IDS.BTC]?.usd ?? priceCache.rates.BTC,
+      ETH: data[COINGECKO_IDS.ETH]?.usd ?? priceCache.rates.ETH,
+      USDT: data[COINGECKO_IDS.USDT]?.usd ?? 1,
+      LTC: data[COINGECKO_IDS.LTC]?.usd ?? priceCache.rates.LTC,
+    };
+    priceCache.fetchedAt = now;
+
+    return priceCache.rates;
+  } catch (error) {
+    console.warn('Crypto price fetch failed, using cached or fallback rates:', error);
+
+    if (priceCache.rates.BTC > 0) {
+      return priceCache.rates;
+    }
+
+    priceCache.rates = { ...FALLBACK_USD_RATES };
+    priceCache.fetchedAt = now;
+    return priceCache.rates;
   }
-
-  const data = (await response.json()) as Record<string, { usd: number }>;
-
-  priceCache.rates = {
-    BTC: data[COINGECKO_IDS.BTC]?.usd ?? priceCache.rates.BTC,
-    ETH: data[COINGECKO_IDS.ETH]?.usd ?? priceCache.rates.ETH,
-    USDT: data[COINGECKO_IDS.USDT]?.usd ?? 1,
-    LTC: data[COINGECKO_IDS.LTC]?.usd ?? priceCache.rates.LTC,
-  };
-  priceCache.fetchedAt = now;
-
-  return priceCache.rates;
 }
 
 export async function usdToCrypto(usdAmount: number, crypto: CryptoCurrency): Promise<number> {

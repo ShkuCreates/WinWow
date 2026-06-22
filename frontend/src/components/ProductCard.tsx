@@ -39,6 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
           src={product.thumbnail}
           alt={product.name}
           fill
+          loading="lazy"
           className="object-cover product-card-image"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
