@@ -8,21 +8,40 @@ export interface PaymentMatch {
 }
 
 const AMOUNT_TOLERANCE = 0.02; // 2% tolerance for network fees / rounding
+const REQUEST_TIMEOUT_MS = 10000;
 
 function meetsMinimum(received: number, expected: number): boolean {
   return received >= expected * (1 - AMOUNT_TOLERANCE);
 }
 
+async function fetchJson<T>(url: string): Promise<T | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      console.warn(`Payment verification endpoint returned ${response.status} for ${url}`);
+      return null;
+    }
+    return (await response.json()) as T;
+  } catch (error) {
+    console.warn(`Payment verification fetch failed for ${url}:`, error);
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function verifyBtcPayment(order: Order): Promise<PaymentMatch> {
   const address = SELLER_ADDRESSES.BTC;
-  const response = await fetch(`https://mempool.space/api/address/${address}/txs`);
-  if (!response.ok) return { found: false };
-
-  const txs = (await response.json()) as Array<{
+  const txs = await fetchJson<Array<{
     txid: string;
     status: { confirmed: boolean; block_time?: number };
     vout: Array<{ scriptpubkey_address?: string; value: number }>;
-  }>;
+  }>>(`https://mempool.space/api/address/${address}/txs`);
+
+  if (!txs) return { found: false };
 
   const orderStartSec = Math.floor(order.createdAt / 1000);
 
@@ -48,15 +67,12 @@ async function verifyEthPayment(order: Order): Promise<PaymentMatch> {
   const apiKey = process.env.ETHERSCAN_API_KEY ?? '';
   const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=desc${apiKey ? `&apikey=${apiKey}` : ''}`;
 
-  const response = await fetch(url);
-  if (!response.ok) return { found: false };
-
-  const data = (await response.json()) as {
+  const data = await fetchJson<{
     status: string;
     result: Array<{ hash: string; to: string; value: string; timeStamp: string }>;
-  };
+  }>(url);
 
-  if (data.status !== '1' || !Array.isArray(data.result)) return { found: false };
+  if (!data || data.status !== '1' || !Array.isArray(data.result)) return { found: false };
 
   const orderStartSec = Math.floor(order.createdAt / 1000);
 
@@ -78,15 +94,12 @@ async function verifyUsdtPayment(order: Order): Promise<PaymentMatch> {
   const apiKey = process.env.ETHERSCAN_API_KEY ?? '';
   const url = `https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${USDT_CONTRACT}&address=${address}&startblock=0&endblock=99999999&sort=desc${apiKey ? `&apikey=${apiKey}` : ''}`;
 
-  const response = await fetch(url);
-  if (!response.ok) return { found: false };
-
-  const data = (await response.json()) as {
+  const data = await fetchJson<{
     status: string;
     result: Array<{ hash: string; to: string; value: string; timeStamp: string }>;
-  };
+  }>(url);
 
-  if (data.status !== '1' || !Array.isArray(data.result)) return { found: false };
+  if (!data || data.status !== '1' || !Array.isArray(data.result)) return { found: false };
 
   const orderStartSec = Math.floor(order.createdAt / 1000);
 
@@ -105,17 +118,14 @@ async function verifyUsdtPayment(order: Order): Promise<PaymentMatch> {
 
 async function verifyLtcPayment(order: Order): Promise<PaymentMatch> {
   const address = SELLER_ADDRESSES.LTC;
-  const response = await fetch(`https://chain.so/api/v2/get_tx_received/LTC/${address}`);
-  if (!response.ok) return { found: false };
-
-  const data = (await response.json()) as {
+  const data = await fetchJson<{
     status: string;
     data: {
       txs: Array<{ txid: string; value: string; time: number }>;
     };
-  };
+  }>(`https://chain.so/api/v2/get_tx_received/LTC/${address}`);
 
-  if (data.status !== 'success' || !data.data?.txs) return { found: false };
+  if (!data || data.status !== 'success' || !data.data?.txs) return { found: false };
 
   const orderStartSec = Math.floor(order.createdAt / 1000);
 
