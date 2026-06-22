@@ -286,6 +286,26 @@ export default function ProductClient() {
               </button>
             </div>
 
+            <div className="service-coverage-glass glass rounded-3xl p-6 mb-12">
+              <div className="text-center mb-4">
+                <p className="text-[#c9a24b] uppercase text-xs tracking-[0.3em] font-semibold">Serving Today</p>
+                <h3 className="text-2xl font-semibold text-[#f5f3ee] mt-2">Available in key luxury markets</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {[
+                  { flag: '🇺🇸', label: 'USA' },
+                  { flag: '🇮🇳', label: 'India' },
+                  { flag: '🇨🇦', label: 'Canada' },
+                  { flag: '🇦🇪', label: 'Dubai' },
+                ].map((region) => (
+                  <div key={region.label} className="service-chip glass-panel p-4 text-center">
+                    <div className="text-4xl mb-2">{region.flag}</div>
+                    <div className="text-sm font-semibold text-[#f5f3ee]">{region.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="mb-12">
               <h3 className="text-xl font-semibold text-[#f5f3ee] mb-4">Specifications</h3>
               <div className="space-y-3">

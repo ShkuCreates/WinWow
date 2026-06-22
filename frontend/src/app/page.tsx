@@ -150,6 +150,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Service Coverage */}
+      <section className="service-coverage-section py-16">
+        <div className="container mx-auto px-6">
+          <div className="glass-panel p-8 text-center mx-auto max-w-4xl">
+            <p className="text-[#c9a24b] uppercase tracking-[0.3em] text-sm mb-4 font-medium">
+              Global Service Network
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl text-[#f5f3ee] mb-3">
+              We Are Currently Serving
+            </h2>
+            <p className="text-[#9a958c] max-w-2xl mx-auto mb-8">
+              Enjoy premium delivery and support across the most trusted luxury watch markets in the world.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+              {[
+                { flag: '🇺🇸', country: 'USA' },
+                { flag: '🇮🇳', country: 'India' },
+                { flag: '🇨🇦', country: 'Canada' },
+                { flag: '🇦🇪', country: 'Dubai' },
+              ].map((region) => (
+                <div key={region.country} className="service-card glass-panel p-6 text-center">
+                  <div className="service-card-flag text-5xl mb-4">{region.flag}</div>
+                  <div className="text-xl font-semibold text-[#f5f3ee]">{region.country}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Collection */}
       <section className="featured-section grain-overlay py-24">
         <div className="container mx-auto px-6 relative z-10">
