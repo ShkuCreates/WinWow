@@ -38,6 +38,7 @@ const mockProducts = [
       'https://i.ibb.co/wZF0ZtGW/Chat-GPT-Image-Jun-22-2026-03-26-23-AM.png',
     ],
     stock: 0,
+  },
   {
     id: '3',
     name: 'WinWow FZ 6 Series - Male',
@@ -52,6 +53,7 @@ const mockProducts = [
       'https://i.ibb.co/pGKGWzn',
     ],
     stock: 0,
+  },
   {
     id: '4',
     name: 'WinWow Sizzel Beauty - Female',

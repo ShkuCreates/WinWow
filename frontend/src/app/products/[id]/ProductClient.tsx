@@ -136,6 +136,7 @@ const productDetails: Record<string, any> = {
       { id: 'r20', user: 'Jason P.', rating: 5, comment: 'Comfortable all-day wear. The Swiss quartz movement is rock solid. WinWow continues to impress with every release.', date: '2026-06-21' },
       { id: 'r21', user: 'Brandon F.', rating: 5, comment: 'The FZ 6 Series is a winner. Sleek design, premium materials, and the $9 deposit made it an easy pre-book. 10/10!', date: '2026-06-22' },
     ],
+  },
   '4': {
     id: '4',
     name: 'WinWow Sizzel Beauty - Female',
