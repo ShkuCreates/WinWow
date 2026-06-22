@@ -155,8 +155,12 @@ export default function ProductClient() {
       } else {
         setPaymentMessage(result.message || 'Payment not detected yet. We will keep checking automatically.');
       }
-    } catch {
-      setPaymentError('Could not verify payment. Make sure the backend server is running and try again.');
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error
+          ? error.message
+          : 'Could not verify payment. Make sure the backend server is running and try again.'
+      );
     } finally {
       setIsVerifying(false);
     }
@@ -181,8 +185,12 @@ export default function ProductClient() {
       await createOrderForPayment(selectedCrypto, formData);
       setStep('payment');
       setPaymentMessage('Send the exact crypto amount below. We verify payment automatically on the blockchain.');
-    } catch {
-      setPaymentError('Failed to start payment. Please ensure the backend server is running.');
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to start payment. Please ensure the backend server is running.'
+      );
     } finally {
       setIsSubmitting(false);
     }

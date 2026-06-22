@@ -1,4 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
 
 export type CryptoCurrency = 'USDT' | 'BTC' | 'ETH' | 'LTC';
 
@@ -35,6 +37,19 @@ async function parseJson<T>(response: Response): Promise<T> {
   return data as T;
 }
 
+async function safeFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(url, options);
+  } catch (error) {
+    throw new Error(
+      `Unable to reach backend at ${url}. Make sure the backend server is running and the API is reachable.`
+    );
+  }
+
+  return parseJson<T>(response);
+}
+
 export async function createOrder(input: {
   productId: string;
   productName: string;
@@ -43,7 +58,7 @@ export async function createOrder(input: {
   crypto: CryptoCurrency;
   customer: CustomerInfo;
 }): Promise<OrderResponse> {
-  const response = await fetch(`${API_URL}/api/orders`, {
+  const data = await safeFetch<{ order: OrderResponse }>(`${API_URL}/api/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -57,7 +72,6 @@ export async function createOrder(input: {
     }),
   });
 
-  const data = await parseJson<{ order: OrderResponse }>(response);
   return data.order;
 }
 
@@ -67,13 +81,16 @@ export async function verifyOrderPayment(orderId: string): Promise<{
   paidAt?: number;
   message?: string;
 }> {
-  const response = await fetch(`${API_URL}/api/orders/${orderId}/verify`, {
-    method: 'POST',
-  });
-
-  if (response.status === 410) {
-    return { status: 'expired', message: 'Order expired' };
+  if (!orderId) {
+    throw new Error('Order ID is missing. Please try again from the pre-book page.');
   }
 
-  return parseJson(response);
+  const response = await safeFetch<{ status: 'pending' | 'paid' | 'expired'; txHash?: string; paidAt?: number; message?: string }>(
+    `${API_URL}/api/orders/${orderId}/verify`,
+    {
+      method: 'POST',
+    }
+  );
+
+  return response;
 }

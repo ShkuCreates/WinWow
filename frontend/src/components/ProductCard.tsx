@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Heart, ShoppingCart } from 'lucide-react';
 
 interface Product {
@@ -14,10 +14,26 @@ interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+  const router = useRouter();
   const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
 
+  const navigateToProduct = () => {
+    router.push(`/products/${product.id}`);
+  };
+
   return (
-    <div className="product-card overflow-hidden">
+    <div
+      className="product-card overflow-hidden cursor-pointer"
+      role="button"
+      tabIndex={0}
+      onClick={navigateToProduct}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          navigateToProduct();
+        }
+      }}
+    >
       <div className="relative aspect-square overflow-hidden">
         <Image
           src={product.thumbnail}
@@ -26,7 +42,11 @@ export default function ProductCard({ product }: { product: Product }) {
           className="object-cover product-card-image"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        <button className="wishlist-btn absolute top-4 right-4 p-2 glass-panel rounded-full">
+        <button
+          onClick={(event) => event.stopPropagation()}
+          className="wishlist-btn absolute top-4 right-4 p-2 glass-panel rounded-full"
+          aria-label="Add to wishlist"
+        >
           <Heart size={20} className="text-[#f5f3ee]" strokeWidth={1.5} />
         </button>
         {product.stock === 0 && (
@@ -50,13 +70,20 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
         
         <div className="flex gap-3">
-          <Link 
-            href={`/products/${product.id}`} 
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              navigateToProduct();
+            }}
             className="flex-1 premium-button text-center text-sm py-3"
           >
             View Details
-          </Link>
-          <button className="premium-button p-3">
+          </button>
+          <button
+            onClick={(event) => event.stopPropagation()}
+            className="premium-button p-3"
+            aria-label="Add to cart"
+          >
             <ShoppingCart size={20} />
           </button>
         </div>
