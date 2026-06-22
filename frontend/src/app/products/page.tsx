@@ -36,6 +36,34 @@ const allProducts = [
       'https://i.ibb.co/wZF0ZtGW/Chat-GPT-Image-Jun-22-2026-03-26-23-AM.png',
     ],
     stock: 0,
+  {
+    id: '3',
+    name: 'WinWow FZ 6 Series - Male',
+    brand: 'WinWow',
+    price: 58,
+    preBookDepositPercentage: 16,
+    thumbnail: 'https://i.ibb.co/Dgw5bs7r',
+    images: [
+      'https://i.ibb.co/Dgw5bs7r',
+      'https://i.ibb.co/8LgG1KK7',
+      'https://i.ibb.co/p6wcgRZP',
+      'https://i.ibb.co/pGKGWzn',
+    ],
+    stock: 0,
+  {
+    id: '4',
+    name: 'WinWow Sizzel Beauty - Female',
+    brand: 'WinWow',
+    price: 67,
+    preBookDepositPercentage: 16,
+    thumbnail: 'https://i.ibb.co/ZR48chC7',
+    images: [
+      'https://i.ibb.co/ZR48chC7',
+      'https://i.ibb.co/CcvP8ZH',
+      'https://i.ibb.co/5hqbM1Dx',
+      'https://i.ibb.co/MDfKG5Jf',
+    ],
+    stock: 0,
   },
 ];
 
