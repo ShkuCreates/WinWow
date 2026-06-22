@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -105,12 +106,12 @@ const productDetails: Record<string, any> = {
       'Water Resistance': '5 ATM',
       'Strap': 'Premium Leather',
     },
-    thumbnail: 'https://i.ibb.co/Dgw5bs7r.png',
+    thumbnail: 'https://i.ibb.co/G3CcJBVH/Whats-App-Image-2026-06-22-at-12-38-46-PM.jpg',
     images: [
-      'https://i.ibb.co/Dgw5bs7r.png',
-      'https://i.ibb.co/8LgG1KK7.png',
-      'https://i.ibb.co/p6wcgRZP.png',
-      'https://i.ibb.co/pGKGWzn.png',
+      'https://i.ibb.co/G3CcJBVH/Whats-App-Image-2026-06-22-at-12-38-46-PM.jpg',
+      'https://i.ibb.co/tTpnVmmJ/Whats-App-Image-2026-06-22-at-12-43-18-PM.jpg',
+      'https://i.ibb.co/MySrbGph/Whats-App-Image-2026-06-22-at-12-42-56-PM-1.jpg',
+      'https://i.ibb.co/WqzqDys/Whats-App-Image-2026-06-22-at-12-42-56-PM.jpg',
     ],
     stock: 0,
     reviews: [
@@ -151,12 +152,12 @@ const productDetails: Record<string, any> = {
       'Water Resistance': '3 ATM',
       'Strap': 'Genuine Leather',
     },
-    thumbnail: 'https://i.ibb.co/ZR48chC7.png',
+    thumbnail: 'https://i.ibb.co/LDjt9CfH/Whats-App-Image-2026-06-22-at-12-50-22-PM-2.jpg',
     images: [
-      'https://i.ibb.co/ZR48chC7.png',
-      'https://i.ibb.co/CcvP8ZH.png',
-      'https://i.ibb.co/5hqbM1Dx.png',
-      'https://i.ibb.co/MDfKG5Jf.png',
+      'https://i.ibb.co/LDjt9CfH/Whats-App-Image-2026-06-22-at-12-50-22-PM-2.jpg',
+      'https://i.ibb.co/LF6NRWZ/Whats-App-Image-2026-06-22-at-12-50-22-PM-1.jpg',
+      'https://i.ibb.co/0yPHDnNV/Whats-App-Image-2026-06-22-at-12-50-22-PM.jpg',
+      'https://i.ibb.co/7JQBRN0Q/Whats-App-Image-2026-06-22-at-12-50-21-PM.jpg',
     ],
     stock: 0,
     reviews: [
@@ -311,17 +312,17 @@ export default function ProductClient() {
       {step === 'detail' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <div className="glass rounded-2xl overflow-hidden aspect-square mb-4">
-              <img src={product.images[selectedImage]} alt={product.name} className="w-full h-full object-cover" />
+            <div className="glass rounded-2xl overflow-hidden aspect-square relative mb-4">
+              <Image src={product.images[selectedImage]} alt={product.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
             <div className="flex gap-4">
               {product.images.map((image: string, index: number) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`glass rounded-xl overflow-hidden w-20 h-20 ${selectedImage === index ? 'ring-2 ring-[#c9a24b]' : ''}`}
+                  className={`glass rounded-xl overflow-hidden w-20 h-20 relative ${selectedImage === index ? 'ring-2 ring-[#c9a24b]' : ''}`}
                 >
-                  <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                  <Image src={image} alt={`${product.name} ${index + 1}`} fill className="object-cover" sizes="80px" />
                 </button>
               ))}
             </div>
@@ -511,7 +512,7 @@ export default function ProductClient() {
 
           <div className="glass rounded-xl p-6 mb-8">
             <div className="flex items-center gap-4 mb-4">
-              <img src={product.thumbnail} alt={product.name} className="w-20 h-20 rounded-lg object-cover" />
+              <Image src={product.thumbnail} alt={product.name} width={80} height={80} className="rounded-lg object-cover" />
               <div>
                 <div className="text-[#f5f3ee] font-semibold">{product.name}</div>
                 <div className="text-[#9a958c]">{product.brand}</div>
