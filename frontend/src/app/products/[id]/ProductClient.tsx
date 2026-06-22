@@ -7,11 +7,25 @@ import { motion } from 'framer-motion';
 import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { createOrder, verifyOrderPayment, type OrderResponse } from '@/lib/api';
+import { SERVING_MARKETS } from '@/lib/servingMarkets';
+
 
 type Step = 'detail' | 'form' | 'payment' | 'success';
 type CryptoCurrency = 'USDT' | 'BTC' | 'ETH' | 'LTC';
 
-const productDetails: Record<string, any> = {
+const productDetails: Record<string, {
+    id: string;
+    name: string;
+    brand: string;
+    price: number;
+    preBookDepositPercentage: number;
+    description: string;
+    specifications: Record<string, string>;
+    thumbnail: string;
+    images: string[];
+    stock: number;
+    reviews: Array<{ id: string; user: string; rating: number; comment: string; date: string }>;
+  }> = {
   '1': {
     id: '1',
     name: 'WinWow S8 Balzer Series - Male',
@@ -206,10 +220,11 @@ export default function ProductClient() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
-  const visibleReviews = showAllReviews ? product.reviews : product.reviews.slice(0, 5);
+  const reviews = product.reviews as Array<{ id: string; user: string; rating: number; comment: string; date: string }>;
+  const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 5);
   const averageRating =
-    product.reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) /
-    product.reviews.length;
+    reviews.reduce((sum: number, r) => sum + r.rating, 0) /
+    reviews.length;
   const ratingDisplay = averageRating.toFixed(1);
 
   const createOrderForPayment = useCallback(
@@ -262,11 +277,17 @@ export default function ProductClient() {
   useEffect(() => {
     if (step !== 'payment' || !order?.id || order.status === 'paid') return;
 
-    verifyPayment();
+    // Avoid calling setState synchronously in the effect body.
+    const id = window.setTimeout(() => {
+      verifyPayment();
+    }, 0);
+
     pollRef.current = setInterval(verifyPayment, 20000);
+
 
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
+      window.clearTimeout(id);
     };
   }, [step, order?.id, order?.status, verifyPayment]);
 
@@ -384,13 +405,8 @@ export default function ProductClient() {
                 <p className="text-[#c9a24b] uppercase text-xs tracking-[0.3em] font-semibold">Serving Today</p>
                 <h3 className="text-2xl font-semibold text-[#f5f3ee] mt-2">Available in key luxury markets</h3>
               </div>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {[
-                  { flag: '🇺🇸', label: 'USA' },
-                  { flag: '🇮🇳', label: 'India' },
-                  { flag: '🇨🇦', label: 'Canada' },
-                  { flag: '🇦🇪', label: 'Dubai' },
-                ].map((region) => (
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {SERVING_MARKETS.map((region) => (
                   <div key={region.label} className="service-chip glass-panel p-4 text-center">
                     <div className="text-4xl mb-2">{region.flag}</div>
                     <div className="text-sm font-semibold text-[#f5f3ee]">{region.label}</div>
@@ -426,7 +442,7 @@ export default function ProductClient() {
               </div>
 
               <div className="space-y-6">
-                {visibleReviews.map((review: any) => (
+                {visibleReviews.map((review) => (
                   <div key={review.id} className="glass p-6 rounded-xl">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">

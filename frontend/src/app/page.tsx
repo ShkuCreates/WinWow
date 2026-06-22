@@ -2,7 +2,8 @@
 
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Star, TrendingUp, Heart, Shield, Truck, Award, CheckCircle } from 'lucide-react';
+import { ArrowRight, Star, TrendingUp, Shield, Truck, Award, CheckCircle } from 'lucide-react';
+import { SERVING_MARKETS } from '@/lib/servingMarkets';
 import ProductCard from '@/components/ProductCard';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useEffect, useRef, useState } from 'react';
@@ -123,7 +124,7 @@ export default function Home() {
               Timeless Elegance
             </h1>
             <p className="text-lg md:text-xl mb-10 text-[#9a958c]">
-              Discover the world's finest luxury watches
+              Discover the world&apos;s finest luxury watches
             </p>
             
             {/* Stats */}
@@ -193,16 +194,11 @@ export default function Home() {
             <p className="text-[#9a958c] max-w-2xl mx-auto mb-8">
               Enjoy premium delivery and support across the most trusted luxury watch markets in the world.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-              {[
-                { flag: '🇺🇸', country: 'USA' },
-                { flag: '🇮🇳', country: 'India' },
-                { flag: '🇨🇦', country: 'Canada' },
-                { flag: '🇦🇪', country: 'Dubai' },
-              ].map((region) => (
-                <div key={region.country} className="service-card glass-panel p-6 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+              {SERVING_MARKETS.map((region) => (
+                <div key={region.label} className="service-card glass-panel p-6 text-center">
                   <div className="service-card-flag text-5xl mb-4">{region.flag}</div>
-                  <div className="text-xl font-semibold text-[#f5f3ee]">{region.country}</div>
+                  <div className="text-xl font-semibold text-[#f5f3ee]">{region.label}</div>
                 </div>
               ))}
             </div>
