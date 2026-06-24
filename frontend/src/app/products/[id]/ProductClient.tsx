@@ -219,7 +219,7 @@ export default function ProductClient() {
 
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
+
   const reviews = product.reviews as Array<{ id: string; user: string; rating: number; comment: string; date: string }>;
   const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 5);
   const averageRating =
@@ -233,7 +233,7 @@ export default function ProductClient() {
         productId: product.id,
         productName: product.name,
         fullPriceUsd: product.price,
-        depositPercentage: product.preBookDepositPercentage,
+        depositPercentage: 100,
         crypto,
         customer,
       });
@@ -258,7 +258,7 @@ export default function ProductClient() {
           setOrder((prev) => prev ? { ...prev, status: 'paid', txHash: result.txHash } : prev);
         }
       } else if (result.status === 'expired') {
-        setPaymentError('This order expired. Please start pre-booking again.');
+        setPaymentError('This order expired. Please start the checkout again.');
         setStep('detail');
       } else {
         setPaymentMessage(result.message || 'Payment not detected yet. We will keep checking automatically.');
@@ -364,39 +364,29 @@ export default function ProductClient() {
 
             <div className="flex items-center gap-3 mb-2">
               <span className="text-4xl font-bold text-[#f5f3ee]">${product.price.toLocaleString()}</span>
-              <span className="bg-[#c9a24b]/20 text-[#c9a24b] px-3 py-1 rounded-full text-sm font-semibold">Pre-Book Available</span>
+              <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-semibold">In Stock: {product.stock}+</span>
             </div>
-            <p className="text-[#c9a24b] mb-6 text-lg">
-              Pre-book deposit: ${preBookDeposit.toFixed(2)} ({product.preBookDepositPercentage}% of ${product.price})
-            </p>
+            {product.tags && product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                {product.tags.map((tag, i) => (
+                  <span key={i} className="bg-[#c9a24b]/20 text-[#c9a24b] px-3 py-1 rounded-full text-sm font-semibold">{tag}</span>
+                ))}
+              </div>
+            )}
 
             <p className="text-[#9a958c] mb-6 leading-relaxed">{product.description}</p>
 
             <div className="glass rounded-2xl p-6 mb-8">
               <h3 className="text-xl font-semibold text-[#f5f3ee] mb-4 flex items-center gap-2">
-                <Calendar size={24} className="text-[#c9a24b]" />
-                Pre-Book Now
+                <ShoppingCart size={24} className="text-[#c9a24b]" />
+                Add to Cart
               </h3>
               <p className="text-[#9a958c] mb-4">
-                Currently out of stock! Secure your order by paying a {product.preBookDepositPercentage}% deposit now. The remaining balance is due before delivery.
+                This product is in stock and ready for immediate delivery!
               </p>
-              <div className="space-y-3 mb-6 pb-4 border-b border-white/10">
-                <div className="flex justify-between items-center">
-                  <span className="text-[#9a958c]">Full Watch Price</span>
-                  <span className="text-lg text-[#f5f3ee]">${product.price.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[#9a958c]">Pre-Book Deposit ({product.preBookDepositPercentage}%)</span>
-                  <span className="text-2xl font-bold text-[#c9a24b]">${preBookDeposit.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-[#9a958c]">Remaining on delivery</span>
-                  <span className="text-[#9a958c]">${(product.price - preBookDeposit).toFixed(2)}</span>
-                </div>
-              </div>
               <button onClick={() => setStep('form')} className="w-full premium-button flex items-center justify-center gap-2 py-4 text-lg">
                 <ShoppingCart size={24} />
-                Pre-Book — Pay ${preBookDeposit.toFixed(2)} Deposit
+                Buy Now — ${product.price.toLocaleString()}
               </button>
             </div>
 
@@ -481,7 +471,7 @@ export default function ProductClient() {
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto glass rounded-2xl p-8">
           <button onClick={() => setStep('detail')} className="text-[#9a958c] hover:text-[#f5f3ee] mb-6 flex items-center gap-2">← Back to Product</button>
           <h2 className="text-3xl font-bold text-[#f5f3ee] mb-2">Your Information</h2>
-          <p className="text-[#9a958c] mb-6">Pre-book deposit: <span className="text-[#c9a24b] font-semibold">${preBookDeposit.toFixed(2)}</span> (full price ${product.price})</p>
+          <p className="text-[#9a958c] mb-6">Total amount: <span className="text-[#c9a24b] font-semibold">${product.price.toLocaleString()}</span></p>
 
           {paymentError && (
             <div className="mb-4 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex items-start gap-2 text-red-300 text-sm">
@@ -522,7 +512,7 @@ export default function ProductClient() {
       {step === 'payment' && order && (
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto glass rounded-2xl p-8">
           <button onClick={() => setStep('form')} className="text-[#9a958c] hover:text-[#f5f3ee] mb-6 flex items-center gap-2">← Back to Form</button>
-          <h2 className="text-3xl font-bold text-[#f5f3ee] mb-2 text-center">Pay Pre-Book Deposit</h2>
+          <h2 className="text-3xl font-bold text-[#f5f3ee] mb-2 text-center">Complete Payment</h2>
           <p className="text-center text-[#9a958c] mb-2">Order ID: <span className="font-mono text-[#f5f3ee]">{order.id}</span></p>
           <p className="text-center text-sm text-[#9a958c] mb-6">Payment is verified automatically on the blockchain</p>
 
@@ -535,8 +525,7 @@ export default function ProductClient() {
               </div>
             </div>
             <div className="space-y-2 pt-4 border-t border-white/10 text-sm">
-              <div className="flex justify-between"><span className="text-[#9a958c]">Full Price</span><span className="text-[#f5f3ee]">${order.fullPriceUsd.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span className="text-[#9a958c]">Pre-Book Deposit</span><span className="text-2xl font-bold text-[#c9a24b]">${order.depositUsd.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span className="text-[#9a958c]">Total Amount</span><span className="text-2xl font-bold text-[#c9a24b]">${order.depositUsd.toFixed(2)}</span></div>
             </div>
           </div>
 
@@ -613,9 +602,9 @@ export default function ProductClient() {
           <div className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Check size={48} className="text-[#c9a24b]" />
           </div>
-          <h2 className="text-4xl font-bold text-[#f5f3ee] mb-4">Pre-Book Confirmed!</h2>
+          <h2 className="text-4xl font-bold text-[#f5f3ee] mb-4">Order Confirmed!</h2>
           <p className="text-[#9a958c] mb-4 text-lg">
-            Your deposit payment was verified on the blockchain. Product updates and delivery notifications will be sent to the contact details you provided.
+            Your payment was verified on the blockchain. Product updates and delivery notifications will be sent to the contact details you provided.
           </p>
           {order?.txHash && (
             <p className="text-sm text-[#9a958c] mb-8 font-mono break-all">Transaction: {order.txHash}</p>

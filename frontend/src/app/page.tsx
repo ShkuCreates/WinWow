@@ -15,7 +15,6 @@ const mockProducts = [
     name: 'WinWow S8 Balzer Series - Male',
     brand: 'WinWow',
     price: 35,
-    preBookDepositPercentage: 15,
     thumbnail: 'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
     images: [
       'https://i.ibb.co/Rp2dTv4v/Chat-GPT-Image-Jun-22-2026-01-51-42-AM.png',
@@ -23,14 +22,14 @@ const mockProducts = [
       'https://i.ibb.co/bjpqDgjH/Chat-GPT-Image-Jun-22-2026-01-51-37-AM.png',
       'https://i.ibb.co/67XfMrvX/Chat-GPT-Image-Jun-22-2026-01-51-34-AM.png',
     ],
-    stock: 0, // Out of stock, pre-booking only
+    stock: 100,
+    tags: ['Popular', 'Best Seller'],
   },
   {
     id: '2',
     name: 'WinWow 114A Premium - Men',
     brand: 'WinWow',
     price: 59,
-    preBookDepositPercentage: 24,
     thumbnail: 'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
     images: [
       'https://i.ibb.co/tTSbZVR3/Chat-GPT-Image-Jun-22-2026-03-25-33-AM.png',
@@ -38,14 +37,14 @@ const mockProducts = [
       'https://i.ibb.co/fzNKpCty/Chat-GPT-Image-Jun-22-2026-03-25-28-AM.png',
       'https://i.ibb.co/wZF0ZtGW/Chat-GPT-Image-Jun-22-2026-03-26-23-AM.png',
     ],
-    stock: 0,
+    stock: 100,
+    tags: ['Hot Selling', 'Limited'],
   },
   {
     id: '3',
     name: 'WinWow FZ 6 Series - Male',
     brand: 'WinWow',
     price: 58,
-    preBookDepositPercentage: 16,
     thumbnail: 'https://i.ibb.co/G3CcJBVH/Whats-App-Image-2026-06-22-at-12-38-46-PM.jpg',
     images: [
       'https://i.ibb.co/G3CcJBVH/Whats-App-Image-2026-06-22-at-12-38-46-PM.jpg',
@@ -53,14 +52,14 @@ const mockProducts = [
       'https://i.ibb.co/MySrbGph/Whats-App-Image-2026-06-22-at-12-42-56-PM-1.jpg',
       'https://i.ibb.co/WqzqDys/Whats-App-Image-2026-06-22-at-12-42-56-PM.jpg',
     ],
-    stock: 0,
+    stock: 100,
+    tags: ['Trending', 'New'],
   },
   {
     id: '4',
     name: 'WinWow Sizzel Beauty - Female',
     brand: 'WinWow',
     price: 67,
-    preBookDepositPercentage: 16,
     thumbnail: 'https://i.ibb.co/LDjt9CfH/Whats-App-Image-2026-06-22-at-12-50-22-PM-2.jpg',
     images: [
       'https://i.ibb.co/LDjt9CfH/Whats-App-Image-2026-06-22-at-12-50-22-PM-2.jpg',
@@ -68,7 +67,8 @@ const mockProducts = [
       'https://i.ibb.co/0yPHDnNV/Whats-App-Image-2026-06-22-at-12-50-22-PM.jpg',
       'https://i.ibb.co/7JQBRN0Q/Whats-App-Image-2026-06-22-at-12-50-21-PM.jpg',
     ],
-    stock: 0,
+    stock: 100,
+    tags: ['Exclusive', 'Elegant'],
   },
 ];
 
@@ -232,6 +232,31 @@ export default function Home() {
               View All Products
               <TrendingUp size={20} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Payment Methods */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <div className="glass-panel p-8 text-center mx-auto max-w-4xl">
+            <p className="text-[#c9a24b] uppercase tracking-[0.3em] text-sm mb-4 font-medium">
+              Secure Payments
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl text-[#f5f3ee] mb-3">
+              Accepting Cryptocurrency
+            </h2>
+            <p className="text-[#9a958c] max-w-2xl mx-auto mb-8">
+              We accept payments via major cryptocurrencies for a secure and seamless shopping experience.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              {['BTC', 'ETH', 'LTC', 'USDT'].map((coin => (
+                <div key={coin} className="service-card glass-panel px-6 py-4 text-center">
+                  <div className="text-2xl font-bold text-[#c9a24b] mb-2">{coin}</div>
+                  <div className="text-sm text-[#f5f3ee]">{coin}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

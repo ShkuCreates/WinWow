@@ -7,15 +7,14 @@ interface Product {
   name: string;
   brand: string;
   price: number;
-  preBookDepositPercentage: number;
   thumbnail: string;
   images: string[];
   stock: number;
+  tags?: string[];
 }
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
-  const preBookDeposit = product.price * (product.preBookDepositPercentage / 100);
 
   const navigateToProduct = () => {
     router.push(`/products/${product.id}`);
@@ -50,11 +49,16 @@ export default function ProductCard({ product }: { product: Product }) {
         >
           <Heart size={20} className="text-[#f5f3ee]" strokeWidth={1.5} />
         </button>
-        {product.stock === 0 && (
-          <div className="discount-shimmer absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Pre-Book
-          </div>
-        )}
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          {product.tags && product.tags.map((tag, index) => (
+            <div
+              key={index}
+              className="bg-gradient-to-r from-[#c9a24b] to-[#d4af7a] text-[#0a0b0d] px-3 py-1 rounded-full text-xs font-bold"
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
       </div>
       
       <div className="p-6">
@@ -65,8 +69,8 @@ export default function ProductCard({ product }: { product: Product }) {
           <span className="text-2xl font-bold text-[#f5f3ee]">
             ${product.price.toLocaleString()}
           </span>
-          <span className="text-sm text-[#c9a24b]">
-            Pre-book with ${preBookDeposit.toFixed(2)} ({product.preBookDepositPercentage}% deposit)
+          <span className="text-sm text-green-400 font-medium">
+            In Stock: {product.stock}+
           </span>
         </div>
         
