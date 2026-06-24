@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Star, ShoppingCart, Check, Calendar, MapPin, User, Mail, Copy, ExternalLink, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
+import { Star, ShoppingCart, Check, MapPin, User, Mail, Copy, ExternalLink, ChevronDown, ChevronUp, Loader2, AlertCircle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { createOrder, verifyOrderPayment, type OrderResponse } from '@/lib/api';
 import { SERVING_MARKETS } from '@/lib/servingMarkets';
@@ -366,9 +366,9 @@ export default function ProductClient() {
               <span className="text-4xl font-bold text-[#f5f3ee]">${product.price.toLocaleString()}</span>
               <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-semibold">In Stock: {product.stock}+</span>
             </div>
-            {product.tags && product.tags.length > 0 && (
+            {(product as any).tags && (product as any).tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
-                {product.tags.map((tag, i) => (
+                {(product as any).tags.map((tag: string, i: number) => (
                   <span key={i} className="bg-[#c9a24b]/20 text-[#c9a24b] px-3 py-1 rounded-full text-sm font-semibold">{tag}</span>
                 ))}
               </div>
