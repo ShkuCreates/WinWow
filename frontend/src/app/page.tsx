@@ -250,7 +250,7 @@ export default function Home() {
               We accept payments via major cryptocurrencies for a secure and seamless shopping experience.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              {['BTC', 'ETH', 'LTC', 'USDT'].map((coin => (
+              {['BTC', 'ETH', 'LTC', 'USDT'].map((coin) => (
                 <div key={coin} className="service-card glass-panel px-6 py-4 text-center">
                   <div className="text-2xl font-bold text-[#c9a24b] mb-2">{coin}</div>
                   <div className="text-sm text-[#f5f3ee]">{coin}</div>
